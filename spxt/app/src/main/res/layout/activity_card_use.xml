@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:background="@color/white"
+    tools:context="code.spxt.cn.activitys.CardUseActivity">
+
+    <ScrollView
+        android:layout_above="@+id/card_commit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="申请人员:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/card_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:textColor="@color/text_color"
+                android:text="申请日期:"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/card_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="车辆型号:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/card_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:textColor="@color/text_color"
+                android:hint="请输入车辆型号"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="车牌号:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/card_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入车牌号"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="出差事由:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/card_reason"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_stroke_30b0ef_5dp_enble"
+                android:enabled="true"
+                android:gravity="top"
+                android:padding="5dp"
+                android:textColor="@color/text_color"
+                android:hint="不超过80个字符"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="目的地:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/card_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:textColor="@color/text_color"
+                android:hint="请输入目的地"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="同车人员:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/card_person"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_stroke_30b0ef_5dp_enble"
+                android:enabled="true"
+                android:gravity="top"
+                android:textColor="@color/text_color"
+                android:hint="请用英文逗号隔开"
+                android:padding="5dp"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="驾驶员:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/card_drive_name"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入驾驶员姓名"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <TextView
+        android:id="@+id/card_commit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="提交"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_background"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

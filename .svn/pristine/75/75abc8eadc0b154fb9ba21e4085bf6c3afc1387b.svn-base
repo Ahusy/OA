@@ -1,0 +1,297 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.common.network.FProtocol;
+import com.common.utils.BitmapUtil;
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+import com.luck.picture.lib.entity.LocalMedia;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.fragments.StepsOneFragment;
+import code.spxt.cn.fragments.StepsThreeFragment;
+import code.spxt.cn.fragments.StepsTwoFragment;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.ChooseEntity;
+import code.spxt.cn.network.entity.Entity;
+import code.spxt.cn.network.entity.Flow;
+import code.spxt.cn.network.entity.OneEntity;
+import code.spxt.cn.network.entity.PhotoEntity;
+import code.spxt.cn.network.entity.SubmitOne;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_SUCCESS;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_THREE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_TWO;
+
+/**
+ * 出差旅游费报销单
+ */
+public class TourismActivity extends ToolBarActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.tourism_frameLayout)
+    private FrameLayout frameLayout;
+    @ViewInject(R.id.tourism_view_one)
+    private View viewOne;
+    @ViewInject(R.id.tourism_view_two)
+    private View viewTwo;
+    @ViewInject(R.id.tourism_view_three)
+    private View viewThree;
+    @ViewInject(R.id.tourism_btn_return)
+    private TextView btnReturn;
+    @ViewInject(R.id.tourism_btn_next)
+    private TextView btnNext;
+    @ViewInject(R.id.tourism_clear)
+    private TextView clear;
+
+    private FragmentManager fragmentManager;
+    public static final String TOURISM_TYPE = "tourism_type";
+    private FragmentTransaction transaction;
+    private StepsOneFragment oneFragment;
+    private StepsTwoFragment twoFragment;
+    private StepsThreeFragment threeFragment;
+
+    private int current = 1;
+    private String flowId;
+    private String twoJsonList;
+    private String flowNo;
+    private String threeJsonList;
+
+    public static void startTourismActivity(Context context) {
+        Intent intent = new Intent(context, TourismActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tourism);
+        initView();
+        initData();
+    }
+
+    private void initData() {
+        viewOne.setVisibility(View.VISIBLE);
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.tourism_frameLayout, oneFragment);
+        transaction.commit();
+    }
+
+    private void initView() {
+        ViewInjectUtils.inject(this);
+        setCenterTitle("出差(调遣)旅费报销单");
+        fragmentManager = getSupportFragmentManager();
+        btnReturn.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
+        clear.setOnClickListener(this);
+        oneFragment = new StepsOneFragment();
+        twoFragment = new StepsTwoFragment();
+        threeFragment = new StepsThreeFragment();
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        SubmitOne submitOne = Parsers.getSubmitOne(data);
+        switch (requestCode) {
+            case REQUEST_NET_ONE:
+                ToastUtil.show(this, submitOne.getResult_desc());
+                flowId = String.valueOf(submitOne.getFlow_id());
+                flowNo = submitOne.getFlow_no();
+                viewOne.setVisibility(View.GONE);
+                viewTwo.setVisibility(View.VISIBLE);
+                Bundle bundle = new Bundle();
+//                bundle.putString("flow_id", String.valueOf(flowId));
+                bundle.putString("flow_no", flowNo);
+                twoFragment.setArguments(bundle);
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.tourism_frameLayout, twoFragment);
+                transaction.commit();
+                btnReturn.setVisibility(View.VISIBLE);
+                current = 2;
+                break;
+            case REQUEST_NET_TWO:
+                viewOne.setVisibility(View.GONE);
+                viewTwo.setVisibility(View.GONE);
+                viewThree.setVisibility(View.VISIBLE);
+                btnNext.setText("提交");
+                Bundle bundleTwo = new Bundle();
+                bundleTwo.putString("lowerCaseTotal", submitOne.getLowerCaseTotal());
+                bundleTwo.putString("capitalTotal", submitOne.getCapitalTotal());
+                bundleTwo.putString("flow_no", flowNo);
+                threeFragment.setArguments(bundleTwo);
+                transaction = fragmentManager.beginTransaction();
+                if (threeFragment.isAdded()){
+                    transaction.show(threeFragment);
+                    transaction.commit();
+                }else{
+                    transaction.replace(R.id.tourism_frameLayout, threeFragment);
+                    transaction.commit();
+                }
+                current = 3;
+                break;
+            case REQUEST_NET_THREE:
+                Entity result = Parsers.getResult(data);
+                if (result.getResultCode().equals(REQUEST_NET_SUCCESS)){
+                    ToastUtil.show(this,result.getResultMsg());
+                    finish();
+                }else{
+                    ToastUtil.show(this,result.getResultMsg());
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tourism_btn_return:
+                current--;
+                if (current == 1) {
+                    viewOne.setVisibility(View.VISIBLE);
+                    viewTwo.setVisibility(View.GONE);
+                    viewThree.setVisibility(View.GONE);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.tourism_frameLayout, oneFragment);
+                    transaction.commit();
+                    btnReturn.setVisibility(View.GONE);
+                } else if (current == 2) {
+                    viewOne.setVisibility(View.GONE);
+                    viewTwo.setVisibility(View.VISIBLE);
+                    viewThree.setVisibility(View.GONE);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.tourism_frameLayout, twoFragment);
+                    transaction.commit();
+                    btnReturn.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.tourism_btn_next:
+                switch (current) {
+                    case 1:
+                        OneEntity click = oneFragment.isClick();
+                        Flow flow = oneFragment.getFlow();
+                        if (click != null) {
+                            submitTravelCostOne(click.getStartTime(), click.getEndTime(), flow.getFlowId(), click.getAddress(), click.getReason(),flow.getFlowNo());
+                        }
+                        break;
+                    case 2:
+                        ArrayList<ChooseEntity> list = twoFragment.twoList();
+                        if (list != null) {
+                            JSONArray jsonArray = new JSONArray();
+                            for (int i = 0; i < list.size(); i++) {
+                                JSONObject tmpObj = null;
+                                tmpObj = new JSONObject();
+                                try {
+                                    tmpObj.put("type", list.get(i).getType());
+                                    tmpObj.put("vehicle", list.get(i).getBars());
+                                    tmpObj.put("travel_place", list.get(i).getPeopleNum());
+                                    tmpObj.put("start_time", list.get(i).getStartTime());
+                                    tmpObj.put("end_time", list.get(i).getEndTime());
+                                    tmpObj.put("standard", list.get(i).getStandard());
+                                    tmpObj.put("days", list.get(i).getDays());
+                                    tmpObj.put("amount", list.get(i).getMoney());
+                                    tmpObj.put("mark", list.get(i).getCostsThat());
+                                    jsonArray.put(tmpObj);
+                                    twoJsonList = jsonArray.toString();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            submitTravelCostTwo(flowNo, twoJsonList);
+                        }
+                        break;
+                    case 3:
+                        ArrayList<PhotoEntity> entities = threeFragment.threeList();
+                        if (entities != null) {
+                            JSONArray jsonArray = new JSONArray();
+                            for (int i = 0; i < entities.size(); i++) {
+                                JSONObject tmpObj = null;
+                                tmpObj = new JSONObject();
+                                try {
+                                    tmpObj.put("type", entities.get(i).getTypeName());
+                                    ArrayList<LocalMedia> picList = entities.get(i).getUrl();
+                                    for (int j = 0; j < picList.size(); j++) {
+                                        String bitmapToString = BitmapUtil.bitmapToString(picList.get(j).getPath(), 60, 60);
+                                        tmpObj.put("pic_str",bitmapToString);
+                                    }
+                                    jsonArray.put(tmpObj);
+                                    threeJsonList = jsonArray.toString();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            submitTravelCostThree(flowNo,threeJsonList);
+                            ToastUtil.show(this, "ok");
+                        }
+                        break;
+                }
+
+                break;
+            case R.id.tourism_clear:
+                switch (current){
+                    case 1:
+                        Intent intentOne = new Intent("clear");
+                        intentOne.putExtra("change", "one");
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentOne);
+                        break;
+                    case 2:
+                        Intent intentTwo = new Intent("clear");
+                        intentTwo.putExtra("change", "two");
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentTwo);
+                        break;
+                    case 3:
+                        Intent intentThree = new Intent("clear");
+                        intentThree.putExtra("change", "three");
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentThree);
+                        break;
+                }
+                break;
+        }
+    }
+
+    private void submitTravelCostOne(String startDate, String endDate, String flowId, String address, String reason,String flowNo) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("start_date", startDate);
+        params.put("end_date", endDate);
+        params.put("flow_id", flowId == null ? "" : flowId);
+        params.put("travel_place_list", address);
+        params.put("travel_reason", reason);
+        params.put("flow_no", flowNo == null ? "" : flowNo);
+        requestHttpData(Constants.Urls.URL_POST_SUBMIT_ONE, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, params);
+    }
+
+    private void submitTravelCostTwo(String flowNo, String itemList) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("flow_no", flowNo);
+        params.put("item_list", itemList);
+        requestHttpData(Constants.Urls.URL_POST_SUBMIT_TWO, REQUEST_NET_TWO, FProtocol.HttpMethod.POST, params);
+    }
+
+    private void submitTravelCostThree(String flowNo, String picList) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("flow_no", flowNo);
+        params.put("m_list", picList);
+        requestHttpData(Constants.Urls.URL_POST_SUBMIT_THREE, REQUEST_NET_THREE, FProtocol.HttpMethod.POST, params);
+    }
+}

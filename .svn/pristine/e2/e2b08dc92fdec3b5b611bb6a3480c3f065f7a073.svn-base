@@ -1,0 +1,28 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * 合同审批
+ */
+public class ContractActivity extends ToolBarActivity {
+
+    public static void startContractActivity(Context context){
+        Intent intent = new Intent(context,ContractActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.spxt_contract);
+        ViewInjectUtils.inject(this);
+        setCenterTitle("合同审批");
+    }
+}

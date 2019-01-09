@@ -1,0 +1,202 @@
+package code.spxt.cn.activitys;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.common.network.FProtocol;
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.MainActivity;
+import code.spxt.cn.R;
+import code.spxt.cn.base.BaseActivity;
+import code.spxt.cn.common.UserCenter;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.UserEntity;
+import code.spxt.cn.utils.DownTimeUtil;
+import code.spxt.cn.utils.ViewInjectUtils;
+import code.spxt.cn.view.VerifyUtils;
+
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_SUCCESS;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_THREE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_TWO;
+
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.login_username)
+    private EditText userName;
+    @ViewInject(R.id.login_password)
+    private EditText password;
+
+    @ViewInject(R.id.login_confirm)
+    private TextView confirm;
+    @ViewInject(R.id.rl1)
+    private RelativeLayout rl1;
+    @ViewInject(R.id.login_code_login)
+    private TextView codeLogin;
+    @ViewInject(R.id.login_forget)
+    private TextView forget;
+
+    @ViewInject(R.id.rl2)
+    private RelativeLayout rl2;
+    @ViewInject(R.id.login_tell_pwd)
+    private TextView tellPwd;
+    @ViewInject(R.id.login_get_code)
+    private TextView getCode;
+
+    private DownTimeUtil downTimeUtil;
+
+    public static void startLoginActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.spxt_login);
+        ViewInjectUtils.inject(this);
+        initView();
+    }
+
+    private void initView() {
+        forget.setOnClickListener(this);
+        confirm.setOnClickListener(this);
+        codeLogin.setOnClickListener(this);
+        tellPwd.setOnClickListener(this);
+        getCode.setOnClickListener(this);
+        password.setHint("请输入您的密码");
+        userName.setHint("请输入用户名");
+        password.setMaxLines(16);
+        downTimeUtil = new DownTimeUtil(this);
+        downTimeUtil.initCountDownTime(getCode);
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        UserEntity userInfo = Parsers.getUserInfo(data);
+        switch (requestCode) {
+            case REQUEST_NET_ONE:
+                UserCenter.saveUserInfo(this,userInfo);
+                if (userInfo.getResult_code().equals(REQUEST_NET_SUCCESS)){
+                    ToastUtil.show(this,userInfo.getResult_desc());
+                    MainActivity.startMainActivity(this);
+                    finish();
+                }
+                break;
+            case REQUEST_NET_TWO:
+                UserCenter.saveUserInfo(this,userInfo);
+                if (userInfo.getResult_code().equals(REQUEST_NET_SUCCESS)){
+                    ToastUtil.show(this,userInfo.getResult_desc());
+                    MainActivity.startMainActivity(this);
+                    finish();
+                }
+                break;
+            case REQUEST_NET_THREE:
+                downTimeUtil.countDownTimer.start();
+                ToastUtil.show(this,"验证码获取成功");
+                break;
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onClick(View v) {
+        String name = userName.getText().toString().trim();
+        String pwd = password.getText().toString().trim();
+        switch (v.getId()) {
+            case R.id.login_forget: // 忘记密码
+                ChangePasswordActivity.startChangePwd(this);
+                break;
+            case R.id.login_code_login: // 验证码登录
+                rl1.setVisibility(View.GONE);
+                rl2.setVisibility(View.VISIBLE);
+                userName.setHint("请输入手机号");
+                password.setHint("请输入您的验证码");
+                password.setMaxLines(6);
+                userName.setText("");
+                password.setText("");
+                break;
+            case R.id.login_tell_pwd: // 手机号密码登录
+                rl2.setVisibility(View.GONE);
+                rl1.setVisibility(View.VISIBLE);
+                userName.setHint("请输入用户名");
+                password.setHint("请输入您的密码");
+                password.setMaxLines(16);
+                password.setText("");
+                userName.setText("");
+                break;
+            case R.id.login_get_code: // 获取验证码
+                if (TextUtils.isEmpty(name)) {
+                    ToastUtil.show(this, "请输入手机号");
+                } else if (!VerifyUtils.checkPhoneNumber(name)) {
+                    ToastUtil.show(this, "请输入正确的手机号");
+                } else {
+                    sendMessage(name);
+                }
+                break;
+            case R.id.login_confirm:
+
+                if (rl1.getVisibility() == 0) {
+                    if (TextUtils.isEmpty(name)) {
+                        ToastUtil.show(this, "请输入用户名");
+                    } else if (TextUtils.isEmpty(pwd)) {
+                        ToastUtil.show(this, "请输入密码");
+                    } else if (name.length() < 6 || name.length() > 18) {
+                        ToastUtil.show(this, "请输入正确的用户名");
+                    } else {
+                        // commit
+                        login(name,pwd);
+                    }
+                } else {
+                    if (TextUtils.isEmpty(name)) {
+                        ToastUtil.show(this, "请输入手机号");
+                    } else if (TextUtils.isEmpty(pwd)) {
+                        ToastUtil.show(this, "请输入验证码");
+                    } else if (!VerifyUtils.checkPhoneNumber(name)) {
+                        ToastUtil.show(this, "请输入正确的手机号码");
+                    } else {
+                        // commit
+                        messageLogin(name,pwd);
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void login(String loginName, String password) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("login_name", loginName);
+        params.put("password", password);
+        requestHttpData(Constants.Urls.URL_POST_LOGIN, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, params);
+    }
+
+    private void messageLogin(String loginName, String code) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("login_name", loginName);
+        params.put("identifyCode", code);
+        requestHttpData(Constants.Urls.URL_POST_MESSAGE_LOGIN, REQUEST_NET_TWO, FProtocol.HttpMethod.POST, params);
+    }
+
+    private void sendMessage(String loginName) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("login_name", loginName);
+        requestHttpData(Constants.Urls.URL_POST_SEND_MESSAGE, REQUEST_NET_THREE, FProtocol.HttpMethod.POST, params);
+    }
+}

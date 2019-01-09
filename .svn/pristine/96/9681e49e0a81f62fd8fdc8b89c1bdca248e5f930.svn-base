@@ -1,0 +1,107 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * 出差审批单
+ */
+public class OutAuditActivity extends ToolBarActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.audit_username)
+    private TextView userName;
+    @ViewInject(R.id.audit_time)
+    private TextView time;
+    @ViewInject(R.id.audit_reason)
+    private EditText reason;
+    @ViewInject(R.id.audit_choose_time)
+    private TextView chooseTime;
+    @ViewInject(R.id.audit_days)
+    private TextView days;
+    @ViewInject(R.id.audit_purpose_address)
+    private TextView pruposeAddress;
+    @ViewInject(R.id.audit_via_address)
+    private TextView viaAddress;
+    @ViewInject(R.id.audit_distant)
+    private TextView distant;
+    @ViewInject(R.id.audit_check_train)
+    private CheckBox cbTrain;
+    @ViewInject(R.id.audit_check_plane)
+    private CheckBox cbPlane;
+    @ViewInject(R.id.audit_check_ship)
+    private CheckBox cbShip;
+    @ViewInject(R.id.audit_check_other)
+    private CheckBox cbOther;
+    @ViewInject(R.id.audit_commit)
+    private TextView commit;
+
+    public static void startOutAuditActivity(Context context) {
+        Intent intent = new Intent(context, OutAuditActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_out_audit);
+        initView();
+    }
+
+    private void initView() {
+        ViewInjectUtils.inject(this);
+        setCenterTitle("出差审批单");
+
+        chooseTime.setOnClickListener(this);
+        pruposeAddress.setOnClickListener(this);
+        viaAddress.setOnClickListener(this);
+        commit.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.audit_choose_time: // 出差时间
+                break;
+            case R.id.audit_purpose_address: // 目的地
+                break;
+            case R.id.audit_via_address: // 途经地
+                break;
+            case R.id.audit_commit:
+                String reasons = reason.getText().toString().trim();
+                String chooseTimes = chooseTime.getText().toString().trim();
+                String prupsAddress = pruposeAddress.getText().toString().trim();
+                String viaAddres = viaAddress.getText().toString().trim();
+                if (TextUtils.isEmpty(reasons)) {
+                    ToastUtil.show(this, "请输入出差事由");
+                } else if (TextUtils.isEmpty(chooseTimes)) {
+                    ToastUtil.show(this, "请选择出差时间");
+                } else if (TextUtils.isEmpty(prupsAddress)) {
+                    ToastUtil.show(this, "请选择出差目的地");
+                } else if (TextUtils.isEmpty(viaAddres)) {
+                    ToastUtil.show(this, "请选择出差途经地");
+                } else if (!isCheck()){
+                    ToastUtil.show(this,"请选择交通工具");
+                }else {
+                    // commit
+                }
+                    break;
+        }
+    }
+
+    private boolean isCheck() {
+        return !(!cbTrain.isChecked() && !cbPlane.isChecked() && !cbShip.isChecked() && !cbOther.isChecked());
+    }
+}

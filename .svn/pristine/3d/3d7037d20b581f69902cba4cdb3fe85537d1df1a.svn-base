@@ -1,0 +1,72 @@
+package code.spxt.cn.fragments;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.common.ui.FBaseFragment;
+import com.common.viewinject.annotation.ViewInject;
+
+import code.spxt.cn.R;
+import code.spxt.cn.activitys.BusinessActivity;
+import code.spxt.cn.activitys.ContractActivity;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * Created by dell on 2018/12/13
+ */
+
+public class CommitFragment extends FBaseFragment implements View.OnClickListener {
+
+    @ViewInject(R.id.commit_cclvf)
+    private TextView cclvf;
+    @ViewInject(R.id.commit_gcxmsp)
+    private TextView gcxmsp;
+    @ViewInject(R.id.commit_jksqd)
+    private TextView jksqd;
+    @ViewInject(R.id.commit_fyzfspd)
+    private TextView fyzfspd;
+    @ViewInject(R.id.commit_ccspd)
+    private TextView ccspd;
+    @ViewInject(R.id.commit_ywzdspd)
+    private TextView ywzdspd;
+    @ViewInject(R.id.commit_htsp)
+    private TextView htsp;
+    @ViewInject(R.id.commit_rkd)
+    private TextView rkd;
+    @ViewInject(R.id.commit_ckd)
+    private TextView ckd;
+    @ViewInject(R.id.commit_gdzcysd)
+    private TextView gdzcysd;
+    @ViewInject(R.id.commit_dzyhpysd)
+    private TextView dzyhpysd;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_commit,container,false);
+        ViewInjectUtils.inject(this,view);
+        initView();
+        return view;
+    }
+
+    private void initView() {
+        ywzdspd.setOnClickListener(this);
+        htsp.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.commit_ywzdspd:
+                BusinessActivity.startBusinessActivity(getActivity());
+                break;
+            case R.id.commit_htsp:
+                ContractActivity.startContractActivity(getActivity());
+                break;
+        }
+    }
+}

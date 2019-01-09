@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="选择"
+            android:textColor="@color/text_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/dp_40"
+            android:paddingStart="@dimen/dp_40">
+
+            <CheckBox
+                android:id="@+id/status_all"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/submit_checked"
+                android:button="@null"
+                android:gravity="center"
+                android:text="全部"
+                android:textColor="@drawable/submit_checked_text" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="0.6" />
+
+
+            <CheckBox
+                android:id="@+id/status_ytg"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/submit_checked"
+                android:button="@null"
+                android:gravity="center"
+                android:text="已通过"
+                android:textColor="@drawable/submit_checked_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/dp_40"
+            android:paddingStart="@dimen/dp_40">
+
+            <CheckBox
+                android:id="@+id/status_shz"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/submit_checked"
+                android:button="@null"
+                android:gravity="center"
+                android:text="审批中"
+                android:textColor="@drawable/submit_checked_text" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="0.6" />
+
+            <CheckBox
+                android:id="@+id/status_ybh"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/submit_checked"
+                android:button="@null"
+                android:gravity="center"
+                android:text="已驳回"
+                android:textColor="@drawable/submit_checked_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/v_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#33000000" />
+
+</LinearLayout>
+
+

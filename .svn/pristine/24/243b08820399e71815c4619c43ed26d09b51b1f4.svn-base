@@ -1,0 +1,15 @@
+package code.spxt.cn.activitys;
+
+import android.os.Bundle;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+
+public class LoginActivity extends ToolBarActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.spxt_login);
+    }
+}

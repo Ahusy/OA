@@ -1,0 +1,195 @@
+package code.spxt.cn.adapters;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import code.spxt.cn.R;
+import code.spxt.cn.network.entity.ChooseEntity;
+
+/**
+ * Created by dell on 2018/12/17
+ */
+
+public class StepsTwoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private ArrayList<ChooseEntity> list;
+    private Context context;
+    private final int ONE = 1;
+    private final int TWO = 2;
+    private final int THREE = 3;
+    private final int FOUR = 4;
+    private final int FIVE = 5;
+    private final int SIX = 6;
+    private final int SEVEN = 7;
+
+    public StepsTwoAdapter(ArrayList<ChooseEntity> list,Context context) {
+        this.context = context;
+        this.list = list;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        if (viewType == ONE){
+            view = View.inflate(context,R.layout.view_ccf,null);
+//            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_ccf,parent);
+            return new ccfViewHolder(view);
+        }else if (viewType == TWO){
+            view = View.inflate(context,R.layout.view_zsf,null);
+            return new zsfViewHolder(view);
+        }else if (viewType == THREE){
+            view = View.inflate(context,R.layout.view_pxf,null);
+            return new pxfViewHolder(view);
+        }else if (viewType == FOUR){
+            view = View.inflate(context,R.layout.view_qtfy,null);
+            return new qtfyViewHolder(view);
+        }else if (viewType == FIVE){
+            view = View.inflate(context,R.layout.view_hyf,null);
+            return new hyfViewHolder(view);
+        }else if (viewType == SIX){
+            view = View.inflate(context,R.layout.view_ccbz,null);
+            return new ccbzViewHolder(view);
+        }else{
+            view = View.inflate(context,R.layout.view_hsbz,null);
+            return new hsbzViewHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int type = list.get(position).getType();
+        if (type == ONE){
+            return ONE;
+        }
+        if (type == TWO){
+            return TWO;
+        }
+        if (type == THREE){
+            return THREE;
+        }
+        if (type == FOUR){
+            return FOUR;
+        }
+        if (type == FIVE){
+            return FIVE;
+        }
+        if (type == SIX){
+            return SIX;
+        }
+        if (type == SEVEN){
+            return SEVEN;
+        }
+        return super.getItemViewType(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public class ccfViewHolder extends RecyclerView.ViewHolder {
+        private TextView ccfDelete,ccfStartTime,ccfEndTime,ccfTraffic;
+        private EditText ccfPeople,ccfMoney;
+        public ccfViewHolder(View itemView) {
+            super(itemView);
+            ccfDelete = itemView.findViewById(R.id.view_ccf_delete);
+            ccfPeople = itemView.findViewById(R.id.view_ccf_person_num);
+            ccfStartTime = itemView.findViewById(R.id.view_ccf_start_time);
+            ccfEndTime = itemView.findViewById(R.id.view_ccf_end_time);
+            ccfTraffic = itemView.findViewById(R.id.view_ccf_traffic);
+            ccfMoney = itemView.findViewById(R.id.view_ccf_money);
+        }
+    }
+
+    public class zsfViewHolder extends RecyclerView.ViewHolder {
+        private TextView zsfDelete,zsfStartTime,zsfEndTime;
+        private EditText zsfPeople,zsfMoney;
+        public zsfViewHolder(View itemView) {
+            super(itemView);
+            zsfDelete = itemView.findViewById(R.id.view_zsf_delete);
+            zsfPeople = itemView.findViewById(R.id.view_zsf_people);
+            zsfStartTime = itemView.findViewById(R.id.view_zsf_start_time);
+            zsfEndTime = itemView.findViewById(R.id.view_zsf_end_time);
+            zsfMoney = itemView.findViewById(R.id.view_zsf_money);
+        }
+    }
+
+    public class pxfViewHolder extends RecyclerView.ViewHolder {
+        private TextView pxfDelete,pxfStartTime,pxfEndTime;
+        private EditText pxfPeople,pxfMoney;
+        public pxfViewHolder(View itemView) {
+            super(itemView);
+            pxfDelete = itemView.findViewById(R.id.view_pfx_delete);
+            pxfPeople = itemView.findViewById(R.id.view_pfx_people);
+            pxfStartTime = itemView.findViewById(R.id.view_pfx_start_time);
+            pxfEndTime = itemView.findViewById(R.id.view_pfx_end_time);
+            pxfMoney = itemView.findViewById(R.id.view_pfx_money);
+        }
+    }
+
+    public class qtfyViewHolder extends RecyclerView.ViewHolder {
+        private TextView qtfyDelete,qtfyDtartTime,qtfyEndTime;
+        private EditText qtfyPeople,qtfyMoney,qtfyQtfyFysm;
+        public qtfyViewHolder(View itemView) {
+            super(itemView);
+            qtfyDelete = itemView.findViewById(R.id.view_qtfy_delete);
+            qtfyDtartTime = itemView.findViewById(R.id.view_qtfy_start_time);
+            qtfyEndTime = itemView.findViewById(R.id.view_qtfy_end_time);
+            qtfyPeople = itemView.findViewById(R.id.view_qtfy_people);
+            qtfyMoney = itemView.findViewById(R.id.view_qtfy_money);
+            qtfyQtfyFysm = itemView.findViewById(R.id.view_qtfy_fysm);
+        }
+    }
+
+    public class hyfViewHolder extends RecyclerView.ViewHolder {
+        private TextView hyfDelete,hyfStartTime,hyfEndTime;
+        private EditText hyfPeople,hyfMoney;
+        public hyfViewHolder(View itemView) {
+            super(itemView);
+            hyfDelete = itemView.findViewById(R.id.view_hyf_delete);
+            hyfPeople = itemView.findViewById(R.id.view_hyf_people);
+            hyfStartTime = itemView.findViewById(R.id.view_hyf_start_time);
+            hyfEndTime = itemView.findViewById(R.id.view_hyf_end_time);
+            hyfMoney = itemView.findViewById(R.id.view_hyf_money);
+        }
+    }
+
+    public class ccbzViewHolder extends RecyclerView.ViewHolder {
+        private TextView ccbzDelete,ccbzStartTime,ccbzEndTime,ccbzStandard;
+        private EditText ccbzDay,ccbzMoney;
+        public ccbzViewHolder(View itemView) {
+            super(itemView);
+            ccbzDelete = itemView.findViewById(R.id.view_ccbz_delete);
+            ccbzStandard = itemView.findViewById(R.id.view_ccbz_standard);
+            ccbzStartTime = itemView.findViewById(R.id.view_ccbz_start_time);
+            ccbzEndTime = itemView.findViewById(R.id.view_ccbz_end_time);
+            ccbzDay = itemView.findViewById(R.id.view_ccbz_day);
+            ccbzMoney = itemView.findViewById(R.id.view_ccbz_money);
+        }
+    }
+
+    public class hsbzViewHolder extends RecyclerView.ViewHolder {
+        private TextView hsbzDelete,hsbzStartTime,hsbzEndTime,hsbzStandard;
+        private EditText hsbzDay,hsbzMoney;
+        public hsbzViewHolder(View itemView) {
+            super(itemView);
+            hsbzDelete = itemView.findViewById(R.id.view_hsbz_delete);
+            hsbzDay = itemView.findViewById(R.id.view_hsbz_day);
+            hsbzStartTime = itemView.findViewById(R.id.view_hsbz_start_time);
+            hsbzEndTime = itemView.findViewById(R.id.view_hsbz_end_time);
+            hsbzStandard = itemView.findViewById(R.id.view_hsbz_standard);
+            hsbzMoney = itemView.findViewById(R.id.view_hsbz_money);
+        }
+    }
+}

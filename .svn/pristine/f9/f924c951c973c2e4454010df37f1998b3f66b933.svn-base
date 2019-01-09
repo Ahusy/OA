@@ -1,0 +1,91 @@
+package code.spxt.cn.network.entity;
+
+/**
+ * 用户信息
+ */
+public class UserEntity {
+
+    /**
+     * login_name : 15036420876
+     * user_id : 101
+     * result_desc : 登录成功
+     * contact : 15036420876
+     * real_name : 15036420876
+     * is_authentication : 0
+     * result_code : 0
+     * card_identity :
+     */
+
+    private String login_name;
+    private int user_id;
+    private String result_desc;
+    private String contact;
+    private String real_name;
+    private int is_authentication;
+    private String result_code;
+    private String card_identity;
+
+    public String getLogin_name() {
+        return login_name;
+    }
+
+    public void setLogin_name(String login_name) {
+        this.login_name = login_name;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getResultMsg() {
+        return result_desc;
+    }
+
+    public void setResult_desc(String result_desc) {
+        this.result_desc = result_desc;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getReal_name() {
+        return real_name;
+    }
+
+    public void setReal_name(String real_name) {
+        this.real_name = real_name;
+    }
+
+    public int getIs_authentication() {
+        return is_authentication;
+    }
+
+    public void setIs_authentication(int is_authentication) {
+        this.is_authentication = is_authentication;
+    }
+
+    public String getResultCode() {
+        return result_code;
+    }
+
+    public void setResult_code(String result_code) {
+        this.result_code = result_code;
+    }
+
+    public String getCard_identity() {
+        return card_identity;
+    }
+
+    public void setCard_identity(String card_identity) {
+        this.card_identity = card_identity;
+    }
+}

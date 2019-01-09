@@ -1,0 +1,18 @@
+package code.spxt.cn.activitys;
+
+import android.os.Bundle;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+
+/**
+ * 公告详情
+ */
+public class NoticeDetailActivity extends ToolBarActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notice_detail);
+    }
+}

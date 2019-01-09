@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:scrollbars="none"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="code.spxt.cn.activitys.OutAuditActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1.基本信息"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:background="@color/title_num_color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:textColor="@color/text_color"
+                android:text="申请人员:"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/audit_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="郑玉婷"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="申请日期:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/audit_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="2018-12-03"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="出差事由:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/audit_reason"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_stroke_30b0ef_5dp_enble"
+                android:enabled="true"
+                android:gravity="top"
+                android:textColor="@color/text_color"
+                android:hint="不超过80个字符"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2.出差时间"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:background="@color/title_num_color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:textColor="@color/text_color"
+                android:text="出差时间:"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/audit_choose_time"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="请选择出差时间"
+                android:gravity="center"
+                android:layout_marginEnd="30dp"
+                android:textColor="@color/text_color"
+                android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/audit_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="共计 4 天"
+            android:padding="10dp"
+            android:textColor="@color/text_color"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3.出差目的地"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:background="@color/title_num_color"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp"
+            android:textColor="@color/text_color"
+            android:text="出差目的地:"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/audit_purpose_address"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:layout_marginEnd="30dp"
+            android:textColor="@color/text_color"
+            android:hint="请选择目的地"
+            android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:textColor="@color/text_color"
+                android:text="出差途径地:"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/audit_via_address"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginEnd="30dp"
+                android:hint="请选择途经地"
+                android:textColor="@color/text_color"
+                android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:textColor="@color/text_color"
+                android:text="出差途径地:"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/audit_distant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="178公里"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4.交通工具"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:background="@color/title_num_color"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="出差乘坐交通工具"
+            android:textColor="@color/text_color"
+            android:padding="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <CheckBox
+                android:id="@+id/audit_check_train"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:background="@drawable/submit_checked"
+                android:text="火车"
+                android:gravity="center"
+                android:button="@null"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:id="@+id/audit_check_plane"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:background="@drawable/submit_checked"
+                android:text="航空"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_marginStart="10dp"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:id="@+id/audit_check_ship"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:background="@drawable/submit_checked"
+                android:text="船"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_marginStart="10dp"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:id="@+id/audit_check_other"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp"
+                android:background="@drawable/submit_checked"
+                android:text="市内交通工具"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_marginStart="10dp"
+                android:textColor="@drawable/submit_checked_text"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/audit_commit"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="提交"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_background"/>
+
+    </LinearLayout>
+
+</ScrollView>

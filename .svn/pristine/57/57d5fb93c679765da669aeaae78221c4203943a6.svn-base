@@ -1,0 +1,221 @@
+package code.spxt.cn.utils;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.common.utils.DeviceUtil;
+import com.common.utils.StringUtil;
+
+import code.spxt.cn.R;
+
+import static android.view.Window.FEATURE_NO_TITLE;
+
+
+/**
+ * Created by zhaoweiwei on 2017/5/4.
+ * 弹窗
+ */
+
+public class DialogUtils {
+
+    private static Dialog dialog;
+
+
+    public static void showTwoBtnDialog(Context context, String title, String content, View.OnClickListener okClickListener, View.OnClickListener cancelClickListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView titleTv = (TextView) view.findViewById(R.id.dialog_title);
+        TextView contentTv = (TextView) view.findViewById(R.id.dialog_content);
+        TextView btnOk = (TextView) view.findViewById(R.id.btn_ok);
+        TextView btnCancel = (TextView) view.findViewById(R.id.btn_cancel);
+
+        titleTv.setText(title);
+        if (!StringUtil.isEmpty(content)) {
+            contentTv.setText(content);
+        }
+        btnOk.setOnClickListener(okClickListener);
+        btnCancel.setOnClickListener(cancelClickListener);
+        dialog.setCancelable(true);
+        dialog.show();
+        setAlertDialogWidth(context);
+    }
+
+    public static void showOneBtnDialog(Context context, String title, String content, String btn, View.OnClickListener onClickListener, boolean isCancel) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_one_button, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView titleTv = view.findViewById(R.id.dialog_onebtn_title);
+        TextView contentTv = view.findViewById(R.id.dialog_onebtn_content);
+        TextView btnTv = view.findViewById(R.id.dialog_onebtn_btn);
+
+        titleTv.setText(title);
+        contentTv.setText(content);
+        btnTv.setText(btn);
+
+        btnTv.setOnClickListener(onClickListener);
+
+        dialog.setCancelable(isCancel);
+        dialog.show();
+        setAlertDialogWidth(context);
+    }
+
+    public static void showOneBtnDialog(Context context, String title, String content, String btn, View.OnClickListener onClickListener) {
+        showOneBtnDialog(context, title, content, btn, onClickListener, true);
+    }
+
+    public static void showTwosBtnDialog(Context context, String title, String content, String btn, String cancels, View.OnClickListener onClickListener, View.OnClickListener cancelListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_two_btn, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView titleTv = view.findViewById(R.id.dialog_two_title);
+        TextView contentTv = view.findViewById(R.id.dialog_two_content);
+        TextView ok = view.findViewById(R.id.dialog_two_ok);
+        TextView cancel = view.findViewById(R.id.dialog_two_cancel);
+
+        titleTv.setText(title);
+        contentTv.setText(content);
+        ok.setText(btn);
+        cancel.setText(cancels);
+
+        ok.setOnClickListener(onClickListener);
+        cancel.setOnClickListener(cancelListener);
+        dialog.setCancelable(true);
+        dialog.show();
+        setAlertDialogWidth(context);
+    }
+
+
+    public static void showShareDialog(Context context, View.OnClickListener text, View.OnClickListener image) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_share, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+        TextView tvText = view.findViewById(R.id.tv_text);
+        TextView tvImage = view.findViewById(R.id.tv_image);
+        tvText.setOnClickListener(text);
+        tvImage.setOnClickListener(image);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public static void showTopBottomDialog(Context context, String[] texts, View.OnClickListener top, View.OnClickListener bottom) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_top_bottom, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+        TextView tvTop = view.findViewById(R.id.tv_top);
+        TextView tvBottom = view.findViewById(R.id.tv_bottom);
+        TextView tvCancel = view.findViewById(R.id.tv_cancel);
+        tvCancel.setOnClickListener(v -> DialogUtils.closeDialog());
+        tvTop.setText(texts[0]);
+        tvBottom.setText(texts[1]);
+        tvTop.setOnClickListener(top);
+        tvBottom.setOnClickListener(bottom);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public static void showTwoBtnEditDialog(Context context, String title, DialogShowPwdClickListenner oklistener, View.OnClickListener cancelListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_two_btn, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView tvTop = view.findViewById(R.id.dialog_two_title);
+        EditText editText = view.findViewById(R.id.edit_pwd);
+        TextView ok = view.findViewById(R.id.dialog_two_ok);
+        TextView cancel = view.findViewById(R.id.dialog_two_cancel);
+        tvTop.setText(title);
+        ok.setOnClickListener(v -> oklistener.onClick(v, editText));
+        cancel.setOnClickListener(cancelListener);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public interface DialogShowPwdClickListenner {
+        void onClick(View v, EditText editText);
+    }
+
+
+    public static void showChooseDialog(Context context,DialogChooseClickListenner dialogChooseClickListenner,View.OnClickListener onClickListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_choose_bottom, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+        RecyclerView recyclerView = view.findViewById(R.id.recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        TextView tvBottom = view.findViewById(R.id.sure);
+        dialogChooseClickListenner.onClick(recyclerView);
+        tvBottom.setOnClickListener(onClickListener);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+    public interface DialogChooseClickListenner {
+        void onClick(RecyclerView recyclerView);
+    }
+    public static void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+    private static void setAlertDialogWidth(Context context) {
+        if (dialog.getWindow() != null) {
+            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            params.width = CommonTools.dp2px(context, 270f);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(params);
+        }
+    }
+}

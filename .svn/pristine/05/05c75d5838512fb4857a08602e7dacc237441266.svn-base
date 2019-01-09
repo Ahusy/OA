@@ -1,0 +1,32 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * 出差审批单
+ */
+public class OutAuditActivity extends ToolBarActivity {
+
+    public static void startOutAuditActivity(Context context){
+        Intent intent = new Intent(context,OutAuditActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_out_audit);
+        initView();
+    }
+
+    private void initView() {
+        ViewInjectUtils.inject(this);
+        setCenterTitle("出差审批单");
+    }
+}

@@ -1,0 +1,121 @@
+package code.spxt.cn.activitys;
+
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
+
+import com.common.network.FProtocol;
+import com.common.viewinject.annotation.ViewInject;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.R;
+import code.spxt.cn.adapters.WaitMeHandleAdapter;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.common.CommonConstant;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.WaitMeHandlerItem;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+
+
+public class WaitMeHandleActivity extends ToolBarActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.rv_view)
+    XRecyclerView rvView;
+
+    private ArrayList<WaitMeHandlerItem> wmiList = new ArrayList<>();
+    private WaitMeHandleAdapter wmlAdapter;
+
+    private int currentPage = 1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_wait_me_handle);
+        ViewInjectUtils.inject(this);
+        initView();
+        initData();
+    }
+
+    private void initView() {
+        setCenterTitle("待我审批");
+        rvView.setLayoutManager(new LinearLayoutManager(this));
+        wmlAdapter = new WaitMeHandleAdapter(wmiList, this);
+        rvView.setAdapter(wmlAdapter);
+        initListener();
+    }
+
+    private void initData() {
+        requestData(true);
+    }
+
+    private void initListener() {
+        rvView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                requestData(true);
+            }
+
+            @Override
+            public void onLoadMore() {
+                requestData(false);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fl_layout:
+                WaitMeHandlerItem tag = (WaitMeHandlerItem) v.getTag();
+                int wfId = tag.getWfId();
+                if (wfId == 2) {
+                    ApprovalBillOutWorkActivity.startAct(this, tag.getFlowId(), tag.getStatus(), tag.getApplyName(), CommonConstant.STATUS_ONE);
+                } else if (wfId == 4) {
+                    ApprovalBillPublicCarUseActivity.startAct(this, tag.getFlowId(), tag.getStatus(), tag.getApplyName(), CommonConstant.STATUS_ONE);
+                } else if (wfId == 5) {
+                    ApprovalBillAgreementActivity.startAct(this, tag.getFlowId(), tag.getStatus(), tag.getApplyName(), CommonConstant.STATUS_ONE);
+                } else if (wfId == 3) {
+                    ApprovalBillBusinessActivity.startAct(this, tag.getFlowId(), tag.getStatus(), tag.getApplyName(), CommonConstant.STATUS_ONE);
+                } else if (wfId == 1) {
+                    ApprovalBillTourismMoneyActivity.startAct(this, tag.getFlowId(), tag.getStatus(),tag.getFlowNo() ,tag.getApplyName(), CommonConstant.STATUS_ONE);
+                }
+                break;
+        }
+    }
+
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode) {
+            case REQUEST_NET_ONE:
+                ArrayList<WaitMeHandlerItem> sList = Parsers.getWaitMeList(data);
+                if (sList != null && sList.size() > 0) {
+                    if (currentPage == 1) {
+                        wmiList.clear();
+                    }
+                    ++currentPage;
+                    wmiList.addAll(sList);
+                    wmlAdapter.notifyDataSetChanged();
+                }
+                rvView.reset();
+                break;
+        }
+    }
+
+    private void requestData(boolean isFirst) {
+        if (isFirst) {
+            currentPage = 1;
+        }
+        IdentityHashMap<String, String> map = new IdentityHashMap<>();
+        map.put(CommonConstant.PAGESIZE, CommonConstant.PAGE_SIZE_10);
+        map.put(CommonConstant.PAGENUM, String.valueOf(currentPage));
+        requestHttpData(Constants.Urls.URL_POST_PENDINGAPPROVALLIST, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, map);
+    }
+}

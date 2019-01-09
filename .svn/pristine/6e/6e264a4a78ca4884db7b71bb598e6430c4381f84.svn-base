@@ -1,0 +1,80 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * 公车使用审批单
+ */
+public class CardUseActivity extends ToolBarActivity {
+
+    @ViewInject(R.id.card_username)
+    private TextUtils userName;
+    @ViewInject(R.id.card_time)
+    private TextUtils time;
+    @ViewInject(R.id.card_model)
+    private EditText model;
+    @ViewInject(R.id.card_num)
+    private EditText num;
+    @ViewInject(R.id.card_reason)
+    private EditText reason;
+    @ViewInject(R.id.card_address)
+    private EditText address;
+    @ViewInject(R.id.card_person)
+    private EditText person;
+    @ViewInject(R.id.card_drive_name)
+    private EditText driveName;
+    @ViewInject(R.id.card_commit)
+    private TextView commit;
+
+    public static void startCardUseActivity(Context context){
+        Intent intent = new Intent(context,CardUseActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_use);
+        ViewInjectUtils.inject(this);
+        setCenterTitle("公车使用审批单");
+        initView();
+    }
+
+    private void initView() {
+        commit.setOnClickListener(v -> {
+            String models = model.getText().toString().trim();
+            String nums = num.getText().toString().trim();
+            String reasons = reason.getText().toString().trim();
+            String addres = address.getText().toString().trim();
+            String persons = person.getText().toString().trim();
+            String driveNames = driveName.getText().toString().trim();
+            if (TextUtils.isEmpty(models)){
+                ToastUtil.show(this,"请输入车辆型号");
+            }else if (TextUtils.isEmpty(nums)){
+                ToastUtil.show(this,"请输入车牌号");
+            }else if (TextUtils.isEmpty(reasons)){
+                ToastUtil.show(this,"请输入出差事由");
+            }else if (TextUtils.isEmpty(addres)){
+                ToastUtil.show(this,"请输入用餐地点");
+            }else if (TextUtils.isEmpty(persons)){
+                ToastUtil.show(this,"请输入同车人员");
+            }else if (TextUtils.isEmpty(driveNames)){
+                ToastUtil.show(this,"请输入驾驶员姓名");
+            }else{
+                // commit
+            }
+        });
+    }
+}

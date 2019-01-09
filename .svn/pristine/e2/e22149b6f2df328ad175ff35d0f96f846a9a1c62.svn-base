@@ -1,0 +1,24 @@
+package code.spxt.cn.network;
+
+/**
+ * Created by dell on 2018/12/12
+ */
+
+public class Constants {
+
+    public static class Urls{
+        private static String URL_BASE_DOMAIN = "https://rqrj.antke.cn";
+
+
+
+        // 版本更新
+        public static String URL_POST_CHECK_UPDATE = URL_BASE_DOMAIN + "/versionUpdate";
+        // 手机密码登录
+        public static String URL_POST_LOGIN = URL_BASE_DOMAIN + "/login";
+        // 验证码登录
+        public static String URL_POST_MESSAGE_LOGIN = URL_BASE_DOMAIN + "/messageLogin";
+        // 发送验证码
+        public static String URL_POST_SEND_MESSAGE = URL_BASE_DOMAIN + "/sendSMSCode";
+
+    }
+}

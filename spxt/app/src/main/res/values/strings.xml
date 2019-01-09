@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">吉城资管</string>
+    <string name="login_count_down_text">%d秒</string>
+</resources>

@@ -1,0 +1,157 @@
+package code.spxt.cn.activitys;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.common.network.FProtocol;
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.common.UserCenter;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.BillAgreementDetail;
+import code.spxt.cn.network.entity.Entity;
+import code.spxt.cn.utils.DateUtils;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+import static code.spxt.cn.common.CommonConstant.EXTRA_OBJECT;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_SUCCESS;
+
+/**
+ * 合同审批
+ */
+public class ContractActivity extends ToolBarActivity {
+
+    @ViewInject(R.id.contract_username)
+    private TextView userName;
+    @ViewInject(R.id.contract_time)
+    private TextView time;
+    @ViewInject(R.id.contract_product_name)
+    private EditText productName;
+    @ViewInject(R.id.contract_money)
+    private EditText money;
+    @ViewInject(R.id.contract_signing)
+    private EditText signing;
+    @ViewInject(R.id.contract_head)
+    private EditText head;
+    @ViewInject(R.id.contract_b)
+    private EditText headB;
+    @ViewInject(R.id.contract_yifang)
+    private EditText yifang;
+    @ViewInject(R.id.contract_num)
+    private EditText num;
+    @ViewInject(R.id.contract_commit)
+    private TextView commit;
+    private String flowNo;
+    private String flow_id;
+
+    public static void startContractActivity(Context context) {
+        Intent intent = new Intent(context, ContractActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void startAct(Activity activity, BillAgreementDetail ba, int requestCode) {
+        Intent intent = new Intent(activity, ContractActivity.class);
+        intent.putExtra(EXTRA_OBJECT, ba);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.spxt_contract);
+        ViewInjectUtils.inject(this);
+        setCenterTitle("合同审批单");
+        initView();
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode) {
+            case REQUEST_NET_ONE:
+                Entity result = Parsers.getResult(data);
+                if (result.getResultCode().equals(REQUEST_NET_SUCCESS)) {
+                    ToastUtil.show(this, result.getResultMsg());
+                    finish();
+                } else {
+                    ToastUtil.show(this, result.getResultMsg());
+                }
+                break;
+        }
+    }
+
+    private void initView() {
+
+        BillAgreementDetail ab = getIntent().getParcelableExtra(EXTRA_OBJECT);
+        String currentTimeToday = DateUtils.getCurrentTime();
+        time.setText(currentTimeToday);
+        userName.setText(UserCenter.getUserInfo(this).getUser_name());
+        if (ab != null) {
+            productName.setText(ab.getProjectName());
+            money.setText(ab.getContractAmount());
+            signing.setText(ab.getSignPartyA());
+            head.setText(ab.getPersonInChargeA());
+            yifang.setText(ab.getSignPartyB());
+            headB.setText(ab.getPersonInChargeB());
+            num.setText(ab.getContractNo());
+            int flowId = ab.getFlowId();
+            flow_id = String.valueOf(flowId);
+            flowNo = ab.getFlowNo();
+        }
+
+        commit.setOnClickListener(v -> {
+            String proName = productName.getText().toString().trim();
+            String total = money.getText().toString().trim();
+            String signings = signing.getText().toString().trim();
+            String heads = head.getText().toString().trim();
+            String yifangs = yifang.getText().toString().trim();
+            String nums = num.getText().toString().trim();
+            String hb = headB.getText().toString().trim();
+            if (TextUtils.isEmpty(proName)) {
+                ToastUtil.show(this, "请输入项目名称");
+            } else if (TextUtils.isEmpty(total)) {
+                ToastUtil.show(this, "请输入合同金额");
+            } else if (TextUtils.isEmpty(signings)) {
+                ToastUtil.show(this, "请输入签约甲方");
+            } else if (TextUtils.isEmpty(heads)) {
+                ToastUtil.show(this, "请输入甲方负责人");
+            } else if (TextUtils.isEmpty(yifangs)) {
+                ToastUtil.show(this, "请输入签约乙方");
+            } else if (TextUtils.isEmpty(hb)) {
+                ToastUtil.show(this, "请输入乙方负责人");
+//            } else if (TextUtils.isEmpty(nums)) {
+//                ToastUtil.show(this, "请输入合同号");
+            } else {
+                // commit
+                submitContractApproval(proName, total, signings, heads, yifangs, hb);
+            }
+        });
+    }
+
+    public void submitContractApproval(String projectName, String contractAmount, String signA, String chargeA, String signB, String chargeB) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("project_name", projectName);
+        params.put("contract_amount", contractAmount);
+        params.put("sign_party_a", signA);
+        params.put("person_in_charge_a", chargeA);
+        params.put("sign_party_b", signB);
+        params.put("person_in_charge_b", chargeB);
+//        params.put("contract_no", contractNo);
+        params.put("flow_id", TextUtils.isEmpty(flow_id) ? "" : flow_id);
+        params.put("flow_no",TextUtils.isEmpty(flowNo) ? "" : flowNo);
+        requestHttpData(Constants.Urls.URL_POST_SUBMIT_CONTRACT, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, params);
+    }
+}

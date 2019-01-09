@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="code.spxt.cn.activitys.ContractActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="申请人员:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/contract_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="申请日期:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/contract_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="项目名称:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入项目名称"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="合同金额:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入合同金额"
+                android:inputType="numberDecimal"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="签约甲方:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_signing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入签约甲方"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="甲方负责人:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入甲方负责人"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="签约乙方:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_yifang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入签约乙方"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="乙方负责人:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入乙方负责人"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="合同号:"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/contract_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="请输入合同号"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <View style="@style/person_split_margin_left_right"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/contract_commit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_background"
+        android:gravity="center"
+        android:text="提交"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

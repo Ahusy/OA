@@ -1,0 +1,144 @@
+package code.spxt.cn.activitys;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.common.network.FProtocol;
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.common.UserCenter;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.BillAgreementDetail;
+import code.spxt.cn.network.entity.BillPublicCarDetail;
+import code.spxt.cn.network.entity.Entity;
+import code.spxt.cn.utils.DateUtils;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+import static code.spxt.cn.common.CommonConstant.EXTRA_OBJECT;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_SUCCESS;
+
+/**
+ * 公车使用审批单
+ */
+public class CardUseActivity extends ToolBarActivity {
+
+    @ViewInject(R.id.card_username)
+    private TextView userName;
+    @ViewInject(R.id.card_time)
+    private TextView time;
+    @ViewInject(R.id.card_model)
+    private EditText model;
+    @ViewInject(R.id.card_num)
+    private EditText num;
+    @ViewInject(R.id.card_reason)
+    private EditText reason;
+    @ViewInject(R.id.card_address)
+    private EditText address;
+    @ViewInject(R.id.card_person)
+    private EditText person;
+    @ViewInject(R.id.card_drive_name)
+    private EditText driveName;
+    @ViewInject(R.id.card_commit)
+    private TextView commit;
+
+    public static void startCardUseActivity(Context context) {
+        Intent intent = new Intent(context, CardUseActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void startAct(Activity activity, BillPublicCarDetail ba, int requestCode) {
+        Intent intent = new Intent(activity, CardUseActivity.class);
+        intent.putExtra(EXTRA_OBJECT, ba);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_use);
+        ViewInjectUtils.inject(this);
+        setCenterTitle("公车使用审批单");
+        initView();
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode) {
+            case REQUEST_NET_ONE:
+                Entity result = Parsers.getResult(data);
+                if (result.getResultCode().equals(REQUEST_NET_SUCCESS)) {
+                    ToastUtil.show(this, result.getResultMsg());
+                    finish();
+                } else {
+                    ToastUtil.show(this, result.getResultMsg());
+                }
+                break;
+        }
+    }
+
+    private void initView() {
+        String currentTimeToday = DateUtils.getCurrentTime();
+        time.setText(currentTimeToday);
+        userName.setText(UserCenter.getUserInfo(this).getUser_name());
+        BillPublicCarDetail ab = getIntent().getParcelableExtra(EXTRA_OBJECT);
+        if (ab != null) {
+            model.setText(ab.getCarType());
+            num.setText(ab.getPlateNumber());
+            reason.setText(ab.getReason());
+            address.setText(ab.getDestination());
+            person.setText(ab.getTogether());
+            driveName.setText(ab.getDriver());
+        }
+
+        commit.setOnClickListener(v -> {
+            String models = model.getText().toString().trim();
+            String nums = num.getText().toString().trim();
+            String reasons = reason.getText().toString().trim();
+            String addres = address.getText().toString().trim();
+            String persons = person.getText().toString().trim();
+            String driveNames = driveName.getText().toString().trim();
+            if (TextUtils.isEmpty(models)) {
+                ToastUtil.show(this, "请输入车辆型号");
+            } else if (TextUtils.isEmpty(nums)) {
+                ToastUtil.show(this, "请输入车牌号");
+            } else if (TextUtils.isEmpty(reasons)) {
+                ToastUtil.show(this, "请输入出差事由");
+            } else if (TextUtils.isEmpty(addres)) {
+                ToastUtil.show(this, "请输入用餐地点");
+            } else if (TextUtils.isEmpty(persons)) {
+                ToastUtil.show(this, "请输入同车人员");
+            } else if (TextUtils.isEmpty(driveNames)) {
+                ToastUtil.show(this, "请输入驾驶员姓名");
+            } else {
+                // commit
+                submitBusApproval(models, nums, reasons, addres, persons, driveNames);
+            }
+        });
+    }
+
+    public void submitBusApproval(String carType, String plateNumber, String reason, String destination, String together, String driver) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("car_type", carType);
+        params.put("plate_number", plateNumber);
+        params.put("reason", reason);
+        params.put("destination", destination);
+        params.put("together", together);
+        params.put("driver", driver);
+        requestHttpData(Constants.Urls.URL_POST_SUBMIT_BUS_APPRIVAL, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, params);
+    }
+}

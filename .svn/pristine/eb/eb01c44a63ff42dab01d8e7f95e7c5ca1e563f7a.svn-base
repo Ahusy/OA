@@ -1,0 +1,164 @@
+package code.spxt.cn.network;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import code.spxt.cn.network.entity.ApprovalFlowItem;
+import code.spxt.cn.network.entity.BillAgreementDetail;
+import code.spxt.cn.network.entity.BillBusinessDetail;
+import code.spxt.cn.network.entity.BillOutWorkDetail;
+import code.spxt.cn.network.entity.BillPublicCarDetail;
+import code.spxt.cn.network.entity.Entity;
+import code.spxt.cn.network.entity.MyReviewItem;
+import code.spxt.cn.network.entity.MySubmitItem;
+import code.spxt.cn.network.entity.UpdateEntity;
+import code.spxt.cn.network.entity.UserEntity;
+import code.spxt.cn.network.entity.WaitMeHandlerItem;
+import code.spxt.cn.network.json.GsonObjectDeserializer;
+
+/**
+ * Created by dell on 2018/12/12
+ */
+
+public class Parsers {
+
+    private static Gson gson = GsonObjectDeserializer.produceGson();
+
+    /**
+     * @return 所有请求的公共部分，业务层的返回码和返回提示
+     */
+    public static Entity getResult(String data) {
+        Entity result = gson.fromJson(data, new TypeToken<Entity>() {
+        }.getType());
+        if (result == null) {
+            result = new Entity();
+        }
+        return result;
+    }
+
+
+    /**
+     * @return 版本更新
+     */
+    public static UpdateEntity getUpdate(String data) {
+        return gson.fromJson(data, new TypeToken<UpdateEntity>() {
+        }.getType());
+    }
+
+    /**
+     * 获取token
+     **/
+    public static UserEntity getUserInfo(String data) {
+        return gson.fromJson(data, new TypeToken<UserEntity>() {
+        }.getType());
+    }
+
+
+    public static ArrayList<MySubmitItem> getSubmitList(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("approvalList"), new TypeToken<ArrayList<MySubmitItem>>() {
+            }.getType());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ArrayList<WaitMeHandlerItem> getWaitMeList(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("approvalList"), new TypeToken<ArrayList<WaitMeHandlerItem>>() {
+            }.getType());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ArrayList<MyReviewItem> getReviewList(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("approvalList"), new TypeToken<ArrayList<MyReviewItem>>() {
+            }.getType());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    /**
+     * 获取出差审批单
+     */
+    public static BillOutWorkDetail getBOWDetail(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("travelApproval"), BillOutWorkDetail.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ArrayList<ApprovalFlowItem> getAFIList(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("p_list"), new TypeToken<ArrayList<ApprovalFlowItem>>() {
+            }.getType());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取出差审批单
+     */
+    public static BillPublicCarDetail getBillPublicCarUser(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("busApproval"), BillPublicCarDetail.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static BillAgreementDetail getBillAgreement(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("contractApproval"), BillAgreementDetail.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public static BillBusinessDetail getBillBusiness(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            return gson.fromJson(jsonObject.optString("entertainApproval"), BillBusinessDetail.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+}

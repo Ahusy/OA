@@ -1,0 +1,385 @@
+package code.spxt.cn.utils;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+import com.common.utils.DeviceUtil;
+import com.common.utils.StringUtil;
+import com.common.utils.ToastUtil;
+import com.ywp.addresspickerlib.AddressPickerView;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import code.spxt.cn.R;
+import code.spxt.cn.interfaces.StringListener;
+import code.spxt.cn.network.entity.ChooseEntity;
+
+import static android.view.Window.FEATURE_NO_TITLE;
+
+
+/**
+ * Created by zhaoweiwei on 2017/5/4.
+ * 弹窗
+ */
+
+public class DialogUtils {
+
+    private static Dialog dialog;
+
+
+    public static void showTwoBtnDialog(Context context, String title, String content, View.OnClickListener okClickListener, View.OnClickListener cancelClickListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView titleTv = (TextView) view.findViewById(R.id.dialog_title);
+        TextView contentTv = (TextView) view.findViewById(R.id.dialog_content);
+        TextView btnOk = (TextView) view.findViewById(R.id.btn_ok);
+        TextView btnCancel = (TextView) view.findViewById(R.id.btn_cancel);
+
+        titleTv.setText(title);
+        if (!StringUtil.isEmpty(content)) {
+            contentTv.setText(content);
+        }
+        btnOk.setOnClickListener(okClickListener);
+        btnCancel.setOnClickListener(cancelClickListener);
+        dialog.setCancelable(true);
+        dialog.show();
+        setAlertDialogWidth(context);
+    }
+
+    public static void showOneBtnDialog(Context context, String title, String content, String btn, View.OnClickListener onClickListener, boolean isCancel) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_one_button, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView titleTv = view.findViewById(R.id.dialog_onebtn_title);
+        TextView contentTv = view.findViewById(R.id.dialog_onebtn_content);
+        TextView btnTv = view.findViewById(R.id.dialog_onebtn_btn);
+
+        titleTv.setText(title);
+        contentTv.setText(content);
+        btnTv.setText(btn);
+
+        btnTv.setOnClickListener(onClickListener);
+
+        dialog.setCancelable(isCancel);
+        dialog.show();
+        setAlertDialogWidth(context);
+    }
+
+    public static void showOneBtnDialog(Context context, String title, String content, String btn, View.OnClickListener onClickListener) {
+        showOneBtnDialog(context, title, content, btn, onClickListener, true);
+    }
+
+    public static void showTwosBtnDialog(Context context, String title, String content, String btn, String cancels, View.OnClickListener onClickListener, View.OnClickListener cancelListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_two_btn, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView titleTv = view.findViewById(R.id.dialog_two_title);
+        TextView contentTv = view.findViewById(R.id.dialog_two_content);
+        TextView ok = view.findViewById(R.id.dialog_two_ok);
+        TextView cancel = view.findViewById(R.id.dialog_two_cancel);
+
+        titleTv.setText(title);
+        contentTv.setText(content);
+        ok.setText(btn);
+        cancel.setText(cancels);
+
+        ok.setOnClickListener(onClickListener);
+        cancel.setOnClickListener(cancelListener);
+        dialog.setCancelable(true);
+        dialog.show();
+        setAlertDialogWidth(context);
+    }
+
+
+    public static void showShareDialog(Context context, View.OnClickListener text, View.OnClickListener image) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_share, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+        TextView tvText = view.findViewById(R.id.tv_text);
+        TextView tvImage = view.findViewById(R.id.tv_image);
+        tvText.setOnClickListener(text);
+        tvImage.setOnClickListener(image);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public static void showTopBottomDialog(Context context, String[] texts, View.OnClickListener top, View.OnClickListener bottom) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_top_bottom, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+        TextView tvTop = view.findViewById(R.id.tv_top);
+        TextView tvBottom = view.findViewById(R.id.tv_bottom);
+        TextView tvCancel = view.findViewById(R.id.tv_cancel);
+        tvCancel.setOnClickListener(v -> DialogUtils.closeDialog());
+        tvTop.setText(texts[0]);
+        tvBottom.setText(texts[1]);
+        tvTop.setOnClickListener(top);
+        tvBottom.setOnClickListener(bottom);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public static void showTwoBtnEditDialog(Context context, String title, DialogShowPwdClickListenner oklistener, View.OnClickListener cancelListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_two_btn, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView tvTop = view.findViewById(R.id.dialog_two_title);
+        EditText editText = view.findViewById(R.id.edit_pwd);
+        TextView ok = view.findViewById(R.id.dialog_two_ok);
+        TextView cancel = view.findViewById(R.id.dialog_two_cancel);
+        tvTop.setText(title);
+        ok.setOnClickListener(v -> oklistener.onClick(v, editText));
+        cancel.setOnClickListener(cancelListener);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public interface DialogShowPwdClickListenner {
+        void onClick(View v, EditText editText);
+    }
+
+    public static void showAddressDialog(Context context, int position, DialogAddressClickListenner dialogAddressClickListenner) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_address, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+
+        AddressPickerView addressPickerView = view.findViewById(R.id.address);
+        addressPickerView.setOnAddressPickerSure((address, provinceCode, cityCode, districtCode) -> {
+            dialogAddressClickListenner.onClick(address, position);
+            closeDialog();
+        });
+        dialog.setCancelable(true);
+        dialog.show();
+
+    }
+
+    public interface DialogAddressClickListenner {
+        void onClick(String addressName, int position);
+    }
+
+    public static void showChooseDialog(Context context, DialogChooseListener listener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_choose_bottom, null);
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            window.setWindowAnimations(R.style.dialog_bottm_anim);
+            window.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = DeviceUtil.getWidth(context);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
+        }
+        CheckBox ccf = view.findViewById(R.id.checkbox_ccf);
+        CheckBox zsf = view.findViewById(R.id.checkbox_zsf);
+        CheckBox pxf = view.findViewById(R.id.checkbox_pxf);
+        CheckBox qtfy = view.findViewById(R.id.checkbox_qtfy);
+        CheckBox hyf = view.findViewById(R.id.checkbox_hyf);
+        CheckBox ccbz = view.findViewById(R.id.checkbox_ccbz);
+        CheckBox hsbz = view.findViewById(R.id.checkbox_hsbz);
+        TextView tvBottom = view.findViewById(R.id.sure);
+        tvBottom.setOnClickListener(v -> {
+            ArrayList<ChooseEntity> list = new ArrayList<>();
+            if (ccf.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(1);
+                list.add(entity);
+            }
+            if (zsf.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(2);
+                list.add(entity);
+            }
+            if (pxf.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(3);
+                list.add(entity);
+            }
+            if (qtfy.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(4);
+                list.add(entity);
+            }
+            if (hyf.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(5);
+                list.add(entity);
+            }
+            if (ccbz.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(6);
+                list.add(entity);
+            }
+            if (hsbz.isChecked()) {
+                ChooseEntity entity = new ChooseEntity(7);
+                list.add(entity);
+            }
+            closeDialog();
+            listener.onClick(list);
+        });
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public interface DialogChooseListener {
+        void onClick(ArrayList<ChooseEntity> list);
+    }
+
+    public static void showDatePicker(Context context, DialogDatePickerListener listener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_time, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        DatePicker picker = view.findViewById(R.id.date_picker);
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int date = calendar.get(Calendar.DATE);
+        DecimalFormat decimalFormat = new DecimalFormat("00");
+        picker.init(year, month, date, (view1, year1, monthOfYear, dayOfMonth) -> {
+            int months = monthOfYear + 1;
+            closeDialog();
+            showTimePicker(context, (hour, minute) -> {
+                String hours = decimalFormat.format(hour);
+                String minutes = decimalFormat.format(minute);
+                listener.onClick(year1 + "-" + months + "-" + dayOfMonth + " " + hours + ":" + minutes);
+            }, v -> {
+                closeDialog();
+            });
+        });
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public interface DialogDatePickerListener {
+        void onClick(String date);
+    }
+
+    public static void showTimePicker(Context context, DialogTimePickerListener listener, View.OnClickListener clickListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_times, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TimePicker picker = view.findViewById(R.id.time_picker);
+        TextView ok = view.findViewById(R.id.time_ok);
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+        picker.setCurrentHour(hour);
+        picker.setCurrentMinute(minute);
+        picker.setIs24HourView(true);
+        ok.setOnClickListener(clickListener);
+        picker.setOnTimeChangedListener((view1, hourOfDay, minute1) -> {
+            listener.onClick(hourOfDay, minute1);
+        });
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    /**
+     * @param type 0通过  1 驳回
+     */
+    public static void showApprovalDialog(Context context, int type, StringListener listener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_approval_btn, null);
+        dialog = new AlertDialog.Builder(context).setView(view).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        TextView tvDesc = view.findViewById(R.id.tv_desc);
+        final EditText etView = view.findViewById(R.id.et_view);
+        TextView tvView = view.findViewById(R.id.tv_view);
+        tvDesc.setText(type == 0 ? "审批意见:" : "驳回原因:");
+        tvView.setText(type == 0 ? "审批通过" : "审批驳回");
+        tvView.setOnClickListener(v -> {
+            String trim = etView.getText().toString().trim();
+            if (type!=0&&TextUtils.isEmpty(trim)) {
+                ToastUtil.show(context, "请输入内容");
+            } else {
+                if (listener != null) {
+                    listener.onString(trim);
+                    closeDialog();
+                }
+            }
+        });
+
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+
+    public interface DialogTimePickerListener {
+        void onClick(int hour, int minute);
+    }
+
+    public static void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+    private static void setAlertDialogWidth(Context context) {
+        if (dialog.getWindow() != null) {
+            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            params.width = CommonTools.dp2px(context, 270f);
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(params);
+        }
+    }
+}

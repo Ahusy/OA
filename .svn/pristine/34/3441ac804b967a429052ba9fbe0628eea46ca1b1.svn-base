@@ -1,0 +1,57 @@
+package code.spxt.cn.adapters;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+import java.util.ArrayList;
+
+import code.spxt.cn.R;
+import code.spxt.cn.network.entity.MySubmitItem;
+
+/**
+ * Android on 2018/12/17.
+ */
+
+public class MySubmitItemAdapter extends RecyclerView.Adapter {
+
+
+    private ArrayList<MySubmitItem> msiList;
+    private View.OnClickListener listener;
+
+    public MySubmitItemAdapter(ArrayList<MySubmitItem> msiList, View.OnClickListener listener) {
+        this.msiList = msiList;
+
+        this.listener = listener;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new MyHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_my_submit_item, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        MyHolder h = (MyHolder) holder;
+        h.flLayout.setOnClickListener(listener);
+        h.flLayout.setTag(position);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 6;
+    }
+
+    private class MyHolder extends RecyclerView.ViewHolder {
+
+        private final FrameLayout flLayout;
+
+        MyHolder(View itemView) {
+            super(itemView);
+            flLayout = itemView.findViewById(R.id.fl_layout);
+        }
+    }
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_choose_type"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+            android:gravity="center"
+            android:hint="请选择发票类型"
+            android:drawableEnd="@drawable/icon_blue_jiantou"
+            android:paddingStart="15dp"
+            android:paddingEnd="0dp"
+            android:drawablePadding="15dp"/>
+
+        <TextView
+            android:id="@+id/item_steps_three_delete"
+            android:layout_width="70dp"
+            android:layout_height="27dp"
+            android:background="@drawable/shape_stroke_5_cheng"
+            android:text="删除"
+            android:textColor="#FE9A47"
+            android:gravity="center"
+            android:layout_marginStart="20dp"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:overScrollMode="never"/>
+
+</LinearLayout>

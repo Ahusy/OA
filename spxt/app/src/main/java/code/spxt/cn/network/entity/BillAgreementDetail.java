@@ -1,0 +1,254 @@
+package code.spxt.cn.network.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Android on 2018/12/20.
+ */
+
+public class BillAgreementDetail implements Parcelable{
+    @SerializedName("flowId")
+    private int flowId;
+    @SerializedName("flowNo")
+    private String flowNo;
+    @SerializedName("flowName")
+    private String flowName;
+    @SerializedName("status")
+    private int status;
+    @SerializedName("createDate")
+    private long createDate;
+    @SerializedName("updateDate")
+    private long updateDate;
+    @SerializedName("applyId")
+    private String applyId;
+    @SerializedName("applyTime")
+    private long applyTime;
+    @SerializedName("projectName")
+    private String projectName;
+    @SerializedName("contractAmount")
+    private String contractAmount;
+    @SerializedName("signPartyA")
+    private String signPartyA;
+    @SerializedName("personInChargeA")
+    private String personInChargeA;
+    @SerializedName("signPartyB")
+    private String signPartyB;
+    @SerializedName("personInChargeB")
+    private String personInChargeB;
+    @SerializedName("contractNo")
+    private String contractNo;
+    @SerializedName("auditTime")
+    private String auditTime;
+    @SerializedName("wfId")
+    private int wfId;
+    @SerializedName("financeStatus")
+    private String financeStatus;
+
+
+    protected BillAgreementDetail(Parcel in) {
+        flowId = in.readInt();
+        flowNo = in.readString();
+        flowName = in.readString();
+        status = in.readInt();
+        createDate = in.readLong();
+        updateDate = in.readLong();
+        applyId = in.readString();
+        applyTime = in.readLong();
+        projectName = in.readString();
+        contractAmount = in.readString();
+        signPartyA = in.readString();
+        personInChargeA = in.readString();
+        signPartyB = in.readString();
+        personInChargeB = in.readString();
+        contractNo = in.readString();
+        auditTime = in.readString();
+        wfId = in.readInt();
+        financeStatus = in.readString();
+    }
+
+    public static final Creator<BillAgreementDetail> CREATOR = new Creator<BillAgreementDetail>() {
+        @Override
+        public BillAgreementDetail createFromParcel(Parcel in) {
+            return new BillAgreementDetail(in);
+        }
+
+        @Override
+        public BillAgreementDetail[] newArray(int size) {
+            return new BillAgreementDetail[size];
+        }
+    };
+
+    public int getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(int flowId) {
+        this.flowId = flowId;
+    }
+
+    public String getFlowNo() {
+        return flowNo;
+    }
+
+    public void setFlowNo(String flowNo) {
+        this.flowNo = flowNo;
+    }
+
+    public String getFlowName() {
+        return flowName;
+    }
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
+
+    public long getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(long updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
+    public long getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(long applyTime) {
+        this.applyTime = applyTime;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getContractAmount() {
+        return contractAmount;
+    }
+
+    public void setContractAmount(String contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
+    public String getSignPartyA() {
+        return signPartyA;
+    }
+
+    public void setSignPartyA(String signPartyA) {
+        this.signPartyA = signPartyA;
+    }
+
+    public String getPersonInChargeA() {
+        return personInChargeA;
+    }
+
+    public void setPersonInChargeA(String personInChargeA) {
+        this.personInChargeA = personInChargeA;
+    }
+
+    public String getSignPartyB() {
+        return signPartyB;
+    }
+
+    public void setSignPartyB(String signPartyB) {
+        this.signPartyB = signPartyB;
+    }
+
+    public String getPersonInChargeB() {
+        return personInChargeB;
+    }
+
+    public void setPersonInChargeB(String personInChargeB) {
+        this.personInChargeB = personInChargeB;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(String auditTime) {
+        this.auditTime = auditTime;
+    }
+
+    public int getWfId() {
+        return wfId;
+    }
+
+    public void setWfId(int wfId) {
+        this.wfId = wfId;
+    }
+
+    public String getFinanceStatus() {
+        return financeStatus;
+    }
+
+    public void setFinanceStatus(String financeStatus) {
+        this.financeStatus = financeStatus;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(flowId);
+        dest.writeString(flowNo);
+        dest.writeString(flowName);
+        dest.writeInt(status);
+        dest.writeLong(createDate);
+        dest.writeLong(updateDate);
+        dest.writeString(applyId);
+        dest.writeLong(applyTime);
+        dest.writeString(projectName);
+        dest.writeString(contractAmount);
+        dest.writeString(signPartyA);
+        dest.writeString(personInChargeA);
+        dest.writeString(signPartyB);
+        dest.writeString(personInChargeB);
+        dest.writeString(contractNo);
+        dest.writeString(auditTime);
+        dest.writeInt(wfId);
+        dest.writeString(financeStatus);
+    }
+}

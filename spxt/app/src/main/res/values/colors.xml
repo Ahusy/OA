@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3B9FF5</color>
+    <color name="colorPrimaryDark">#3B9FF5</color>
+    <color name="colorAccent">#3B9FF5</color>
+    <color name="black">#000000</color>
+    <color name="spilt_line">#EEEEEE</color>
+    <color name="middle_gray">#333333</color>
+    <color name="default_ev_border_color">#CCCCCC</color>
+    <color name="dialog_button_text">#0066ff</color>
+    <color name="white">#FFFFFF</color><!--白色 -->
+    <color name="common_spilt_line">#f2f2f2</color>
+    <color name="C_7AAEDA">#7aaeda</color>
+    <color name="common_bg">#F2F2F2</color>
+    <color name="text_hui">#F7F7F7</color>
+
+    <color name="color_f6">#f6f6f6</color>
+    <color name="background_color_colors">#424242</color>
+    <color name="base_color">#3B9FF5</color>
+    <color name="title_color">#90bbf6</color>
+    <color name="text_color">#444444</color>
+    <color name="C_8EBAF7">#8EBAF7</color>
+    <color name="btn_color">#9fd4ec</color>
+    <color name="title_num_color">#9DD3ED</color>
+    <color name="red">#f00</color>
+
+</resources>

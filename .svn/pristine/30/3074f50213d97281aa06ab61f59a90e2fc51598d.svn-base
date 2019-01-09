@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/title_num_color"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="车船费"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/view_ccf_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
+            android:text="删除"
+            android:textColor="@color/red"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp"
+            android:text="人数:"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"/>
+
+        <EditText
+            android:id="@+id/view_ccf_person_num"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:gravity="right|center_vertical"
+            android:hint="请输入人数"
+            android:inputType="number"
+            android:maxLength="2"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <View style="@style/person_split_margin_left_right"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp"
+            android:text="时间:"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/view_ccf_start_time"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+            android:gravity="center_vertical|center"
+            android:hint="开始时间"
+            android:drawableEnd="@drawable/icon_calendar"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/view_ccf_end_time"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+            android:gravity="center_vertical|center"
+            android:hint="结束时间"
+            android:drawableEnd="@drawable/icon_calendar"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <View style="@style/person_split_margin_left_right"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp"
+            android:textColor="@color/text_color"
+            android:text="交通工具:"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/view_ccf_traffic"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_stroke_5b0ef_5dp_enble"
+            android:gravity="center_vertical|center"
+            android:hint="请选择交通工具"
+            android:drawableEnd="@drawable/icon_blue_jiantou"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <View style="@style/person_split_margin_left_right"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp"
+            android:text="金额:"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"/>
+
+        <EditText
+            android:id="@+id/view_ccf_money"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:gravity="right|center_vertical"
+            android:hint="请输入金额"
+            android:inputType="numberDecimal"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/spilt_line"/>
+
+</LinearLayout>

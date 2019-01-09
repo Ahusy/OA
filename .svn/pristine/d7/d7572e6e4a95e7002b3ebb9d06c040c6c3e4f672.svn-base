@@ -1,0 +1,48 @@
+package code.spxt.cn.network;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import code.spxt.cn.network.entity.Entity;
+import code.spxt.cn.network.entity.UpdateEntity;
+import code.spxt.cn.network.entity.UserEntity;
+import code.spxt.cn.network.json.GsonObjectDeserializer;
+
+/**
+ * Created by dell on 2018/12/12
+ */
+
+public class Parsers {
+
+    private static Gson gson = GsonObjectDeserializer.produceGson();
+
+    /**
+     * @return 所有请求的公共部分，业务层的返回码和返回提示
+     */
+    public static Entity getResult(String data) {
+        Entity result = gson.fromJson(data, new TypeToken<Entity>() {
+        }.getType());
+        if (result == null) {
+            result = new Entity();
+        }
+        return result;
+    }
+
+
+    /**
+     * @return 版本更新
+     */
+    public static UpdateEntity getUpdate(String data) {
+        return gson.fromJson(data, new TypeToken<UpdateEntity>() {
+        }.getType());
+    }
+
+    /**
+     * 获取token
+     **/
+    public static UserEntity getUserInfo(String data) {
+        return gson.fromJson(data, new TypeToken<UserEntity>() {
+        }.getType());
+    }
+
+}

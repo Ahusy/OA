@@ -1,0 +1,151 @@
+package code.spxt.cn.network.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+
+/**
+ * Android on 2018/12/24.
+ */
+
+public class EditTourism implements Parcelable {
+    private int flowId;
+    private String flowNo;
+    private ArrayList<PhotoCopyEntity> photos;
+    private String total;//小写
+    private String capitalTotal;//大写
+    private ArrayList<AddressEntity> addressList;//地址
+    private String desc;//出差事由
+    private String startTime;//开始时间
+    private String endTime;//结束时间
+    private ArrayList<StepsTwoEntity.ItemsListBean> moneyList;//明细列表
+
+    public EditTourism() {
+    }
+
+
+    protected EditTourism(Parcel in) {
+        flowId = in.readInt();
+        flowNo = in.readString();
+        photos = in.createTypedArrayList(PhotoCopyEntity.CREATOR);
+        total = in.readString();
+        capitalTotal = in.readString();
+        addressList = in.createTypedArrayList(AddressEntity.CREATOR);
+        desc = in.readString();
+        startTime = in.readString();
+        endTime = in.readString();
+        moneyList = in.createTypedArrayList(StepsTwoEntity.ItemsListBean.CREATOR);
+    }
+
+    public static final Creator<EditTourism> CREATOR = new Creator<EditTourism>() {
+        @Override
+        public EditTourism createFromParcel(Parcel in) {
+            return new EditTourism(in);
+        }
+
+        @Override
+        public EditTourism[] newArray(int size) {
+            return new EditTourism[size];
+        }
+    };
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getCapitalTotal() {
+        return capitalTotal;
+    }
+
+    public void setCapitalTotal(String capitalTotal) {
+        this.capitalTotal = capitalTotal;
+    }
+
+    public ArrayList<AddressEntity> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(ArrayList<AddressEntity> addressList) {
+        this.addressList = addressList;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public ArrayList<StepsTwoEntity.ItemsListBean> getMoneyList() {
+        return moneyList;
+    }
+
+    public void setMoneyList(ArrayList<StepsTwoEntity.ItemsListBean> moneyList) {
+        this.moneyList = moneyList;
+    }
+
+    public int getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(int flowId) {
+        this.flowId = flowId;
+    }
+
+    public String getFlowNo() {
+        return flowNo;
+    }
+
+    public void setFlowNo(String flowNo) {
+        this.flowNo = flowNo;
+    }
+
+    public ArrayList<PhotoCopyEntity> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<PhotoCopyEntity> photos) {
+        this.photos = photos;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(flowId);
+        dest.writeString(flowNo);
+        dest.writeTypedList(photos);
+        dest.writeString(total);
+        dest.writeString(capitalTotal);
+        dest.writeTypedList(addressList);
+        dest.writeString(desc);
+        dest.writeString(startTime);
+        dest.writeString(endTime);
+        dest.writeTypedList(moneyList);
+    }
+}

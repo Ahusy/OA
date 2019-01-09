@@ -1,0 +1,73 @@
+package code.spxt.cn.network.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+
+/**
+ * Android on 2018/12/24.
+ */
+
+public class EditTourism implements Parcelable {
+    private int flowId;
+    private String flowNo;
+    private ArrayList<PhotoCopyEntity> photos;
+
+    public EditTourism() {
+    }
+
+    protected EditTourism(Parcel in) {
+        flowId = in.readInt();
+        flowNo = in.readString();
+        photos = in.createTypedArrayList(PhotoCopyEntity.CREATOR);
+    }
+
+    public static final Creator<EditTourism> CREATOR = new Creator<EditTourism>() {
+        @Override
+        public EditTourism createFromParcel(Parcel in) {
+            return new EditTourism(in);
+        }
+
+        @Override
+        public EditTourism[] newArray(int size) {
+            return new EditTourism[size];
+        }
+    };
+
+    public int getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(int flowId) {
+        this.flowId = flowId;
+    }
+
+    public String getFlowNo() {
+        return flowNo;
+    }
+
+    public void setFlowNo(String flowNo) {
+        this.flowNo = flowNo;
+    }
+
+    public ArrayList<PhotoCopyEntity> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<PhotoCopyEntity> photos) {
+        this.photos = photos;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(flowId);
+        dest.writeString(flowNo);
+        dest.writeTypedList(photos);
+    }
+}

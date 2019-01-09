@@ -1,0 +1,30 @@
+package code.spxt.cn.network.entity;
+
+/**
+ * Created by dell on 2018/12/13
+ */
+
+public class ChooseEntity {
+
+    private String name;
+    private boolean checked;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public ChooseEntity() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}

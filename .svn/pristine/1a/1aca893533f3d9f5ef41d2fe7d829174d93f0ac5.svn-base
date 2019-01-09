@@ -1,0 +1,145 @@
+package code.spxt.cn.adapters;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import code.spxt.cn.R;
+import code.spxt.cn.common.Global;
+import code.spxt.cn.network.entity.MyReviewAFV;
+import code.spxt.cn.network.entity.MyReviewItem;
+import code.spxt.cn.utils.TimeUtil;
+import code.spxt.cn.view.ApprovalFlowView;
+
+/**
+ * Android on 2018/12/17.
+ */
+
+public class MyReviewAdapter extends BaseAdapter {
+
+
+    private ArrayList<MyReviewItem> msiList;
+    private View.OnClickListener listener;
+
+    public MyReviewAdapter(ArrayList<MyReviewItem> msiList, View.OnClickListener listener) {
+        this.msiList = msiList;
+        this.listener = listener;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == Global.RV_EMPTY) {
+            return new EmptyHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_empty, parent, false));
+        }
+        return new MyHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_my_review_item, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == Global.RV_EMPTY) {
+            if (!isInit) {
+                EmptyHolder eH = (BaseAdapter.EmptyHolder) holder;
+                eH.llEmpty.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
+        MyHolder h = (MyHolder) holder;
+        MyReviewItem mr = msiList.get(position);
+        h.tvTitle.setText(mr.getFlowName());
+        h.tvName.setText(String.valueOf("申请人:" + mr.getWorkerName()));
+        String time = TimeUtil.formatTime(mr.getApplyTime(), TimeUtil.TIME_FORMAT_FOUR);
+        h.tvTime.setText(String.valueOf("申请时间:" + time));
+        h.tvDesc.setVisibility(View.GONE);
+        if (0 == mr.getStatus()) {
+            //待审批
+            h.tvStatus.setText("审批状态:待审批");
+        } else if (1 == mr.getStatus()) {
+            //审批中
+            h.tvStatus.setText("审批状态:审批中");
+        } else if (2 == mr.getStatus()) {
+            //完成
+            h.tvStatus.setText("审批状态:已完成");
+        } else if (3 == mr.getStatus()) {
+            //已驳回
+            h.tvStatus.setText("审批状态:已驳回");
+        } else if (4 == mr.getStatus()) {
+            //已取消
+            h.tvStatus.setText("审批状态:已撤回");
+        }
+
+        ArrayList<MyReviewAFV> mraLists = mr.getpList();
+
+        ArrayList<ApprovalFlowView.Text> texts = new ArrayList<>();
+        for (MyReviewAFV mar : mraLists) {
+            ApprovalFlowView.Text text = new ApprovalFlowView.Text();
+            text.setName(mar.getOperateUserName());
+            if (mar.getType() == 1) {
+                text.setTag("审批中");
+            } else {
+                if (mar.getpStatus() == 1) {
+                    text.setTag("已同意");
+                } else {
+                    text.setTag("已驳回");
+                    h.tvDesc.setVisibility(View.VISIBLE);
+                    h.tvDesc.setText(mar.getMark());
+                }
+            }
+
+            texts.add(text);
+        }
+        if (texts.size() > 0 && texts.size() < 3) {
+            h.afvView.setData(texts, true);
+        }
+
+        h.tvDesc.setVisibility(3 == mr.getStatus() ? View.VISIBLE : View.GONE);
+        h.tvReset.setVisibility(3 == mr.getStatus() ? View.VISIBLE : View.GONE);
+        h.tvReset.setOnClickListener(listener);
+        h.tvReset.setTag(mr);
+        h.flLayout.setOnClickListener(listener);
+        h.flLayout.setTag(mr);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return msiList == null || msiList.size() == 0 ? 1 : msiList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0 && (msiList == null || msiList.size() == 0)) {
+            return Global.RV_EMPTY;
+        } else {
+            return Global.RV_DEFAULT;
+        }
+    }
+
+    private class MyHolder extends RecyclerView.ViewHolder {
+
+        private final FrameLayout flLayout;
+        private final TextView tvTitle;
+        private final TextView tvName;
+        private final TextView tvTime;
+        private final TextView tvStatus;
+        private final TextView tvDesc;
+        private final ApprovalFlowView afvView;
+        private final TextView tvReset;
+
+        MyHolder(View itemView) {
+            super(itemView);
+            flLayout = itemView.findViewById(R.id.fl_layout);
+            tvTitle = itemView.findViewById(R.id.tv_title);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvTime = itemView.findViewById(R.id.tv_time);
+            tvStatus = itemView.findViewById(R.id.tv_status);
+            tvDesc = itemView.findViewById(R.id.tv_desc);
+            afvView = itemView.findViewById(R.id.afv_view);
+            tvReset = itemView.findViewById(R.id.tv_reset);
+        }
+    }
+}

@@ -1,0 +1,132 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.common.viewinject.annotation.ViewInject;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.fragments.StepsOneFragment;
+import code.spxt.cn.fragments.StepsThreeFragment;
+import code.spxt.cn.fragments.StepsTwoFragment;
+import code.spxt.cn.network.entity.OneEntity;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * 出差旅游费报销单
+ */
+public class TourismActivity extends ToolBarActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.tourism_frameLayout)
+    private FrameLayout frameLayout;
+    @ViewInject(R.id.tourism_view_one)
+    private View viewOne;
+    @ViewInject(R.id.tourism_view_two)
+    private View viewTwo;
+    @ViewInject(R.id.tourism_view_three)
+    private View viewThree;
+    @ViewInject(R.id.tourism_btn_return)
+    private TextView btnReturn;
+    @ViewInject(R.id.tourism_btn_next)
+    private TextView btnNext;
+
+    private FragmentManager fragmentManager;
+    public static final String TOURISM_TYPE = "tourism_type";
+    private FragmentTransaction transaction;
+    private StepsOneFragment oneFragment;
+    private StepsTwoFragment twoFragment;
+    private StepsThreeFragment threeFragment;
+
+    private int current = 1;
+
+    public static void startTourismActivity(Context context){
+        Intent intent = new Intent(context,TourismActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tourism);
+        initView();
+        initData();
+    }
+
+    private void initData() {
+        viewOne.setVisibility(View.VISIBLE);
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.tourism_frameLayout,oneFragment);
+        transaction.commit();
+    }
+
+    private void initView() {
+        ViewInjectUtils.inject(this);
+        setCenterTitle("出差(调遣)旅费报销单");
+        fragmentManager = getSupportFragmentManager();
+        btnReturn.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
+        oneFragment = new StepsOneFragment();
+        twoFragment = new StepsTwoFragment();
+        threeFragment = new StepsThreeFragment();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tourism_btn_return:
+                current--;
+                if (current == 1){
+                    viewOne.setVisibility(View.VISIBLE);
+                    viewTwo.setVisibility(View.GONE);
+                    viewThree.setVisibility(View.GONE);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.tourism_frameLayout,oneFragment);
+                    transaction.commit();
+                    btnReturn.setVisibility(View.GONE);
+                }else if (current == 2){
+                    viewOne.setVisibility(View.GONE);
+                    viewTwo.setVisibility(View.VISIBLE);
+                    viewThree.setVisibility(View.GONE);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.tourism_frameLayout,twoFragment);
+                    transaction.commit();
+                    btnReturn.setVisibility(View.VISIBLE);
+                }
+                Log.i("--------", "onClick: "+current);
+                break;
+            case R.id.tourism_btn_next:
+                OneEntity click = oneFragment.isClick();
+                if (click == null){
+                }else {
+                    current++;
+                    if (current == 2) {
+                        viewOne.setVisibility(View.GONE);
+                        viewTwo.setVisibility(View.VISIBLE);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.tourism_frameLayout, twoFragment);
+                        transaction.commit();
+                        btnReturn.setVisibility(View.VISIBLE);
+                    } else if (current == 3) {
+                        viewOne.setVisibility(View.GONE);
+                        viewTwo.setVisibility(View.GONE);
+                        viewThree.setVisibility(View.VISIBLE);
+                        btnNext.setText("提交");
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.tourism_frameLayout, threeFragment);
+                        transaction.commit();
+                    }
+                }
+
+                Log.i("--------", "onClick: "+current);
+                break;
+        }
+    }
+}

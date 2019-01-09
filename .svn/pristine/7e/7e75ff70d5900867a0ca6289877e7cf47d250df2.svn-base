@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">OAspxt</string>
+    <string name="login_count_down_text">%d秒</string>
+</resources>

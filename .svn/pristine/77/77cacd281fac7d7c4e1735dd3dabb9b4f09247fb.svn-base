@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\spxt\\commonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_f_progress_dialog.xml.flat",
+        "source": "D:\\spxt\\commonlib\\build\\intermediates\\bundles\\debug\\res\\layout\\f_progress_dialog.xml"
+    },
+    {
+        "merged": "D:\\spxt\\commonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_loading.png.flat",
+        "source": "D:\\spxt\\commonlib\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\loading.png"
+    },
+    {
+        "merged": "D:\\spxt\\commonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_load_operate.xml.flat",
+        "source": "D:\\spxt\\commonlib\\build\\intermediates\\bundles\\debug\\res\\anim\\load_operate.xml"
+    }
+]

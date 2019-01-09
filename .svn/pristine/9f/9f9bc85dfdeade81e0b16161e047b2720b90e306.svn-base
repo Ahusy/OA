@@ -1,0 +1,86 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--充满布局的分割线-->
+    <style name="person_split_match">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/spilt_line</item>
+    </style>
+
+    <!--充满布局的分割线-->
+    <style name="person_split_matchs">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">17px</item>
+        <item name="android:background">@color/spilt_line</item>
+    </style>
+
+    <!--有左右距离的分割线-->
+    <style name="person_split_margin_left_right">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2px</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:background">@color/spilt_line</item>
+    </style>
+
+    <style name="ActivityDialogMatch" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--<item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>-->
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="dialog_bottm_anim" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/anim_bottom_to_top</item>
+        <item name="android:windowExitAnimation">@anim/anim_top_to_bottom</item>
+    </style>
+
+    <style name="style_et_input">
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/middle_gray</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:textColorHint">@color/default_ev_border_color</item>
+        <item name="android:background">@null</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="text_write_bg_9dd3ed">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:background">#9DD3ED</item>
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <style name="checkbox_one">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/submit_checked</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="t5_b5_s10_e10">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
+</resources>

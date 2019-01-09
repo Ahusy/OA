@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择"
+            android:padding="10dp"
+            android:textColor="@color/text_color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:background="@drawable/submit_checked"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="50dp"
+                android:text="全部"
+                android:gravity="center"
+                android:button="@null"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="40dp"
+                android:text="待审核"
+                android:gravity="center"
+                android:button="@null"
+                android:background="@drawable/submit_checked"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="已通过"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/submit_checked"
+                android:textColor="@drawable/submit_checked_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp">
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:text="审核中"
+                android:background="@drawable/submit_checked"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="50dp"
+                android:gravity="center"
+                android:button="@null"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:text="已驳回"
+                android:layout_marginEnd="40dp"
+                android:gravity="center"
+                android:button="@null"
+                android:background="@drawable/submit_checked"
+                android:textColor="@drawable/submit_checked_text"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:text="已撤回"
+                android:gravity="center"
+                android:layout_marginEnd="10dp"
+                android:button="@null"
+                android:background="@drawable/submit_checked"
+                android:textColor="@drawable/submit_checked_text"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

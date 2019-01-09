@@ -1,0 +1,29 @@
+package code.spxt.cn.network.entity;
+
+import java.io.Serializable;
+
+/**
+ * Created by dell on 2018/12/17
+ */
+
+public class AddressEntity implements Serializable{
+    public AddressEntity() {
+    }
+
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressEntity{" +
+                "address='" + address + '\'' +
+                '}';
+    }
+}

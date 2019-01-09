@@ -1,0 +1,644 @@
+package code.spxt.cn.adapters;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import code.spxt.cn.R;
+import code.spxt.cn.network.entity.ChooseEntity;
+import code.spxt.cn.network.entity.ChooseType;
+import code.spxt.cn.utils.DedindTextWatcher;
+import code.spxt.cn.utils.DialogUtils;
+
+/**
+ * Created by dell on 2018/12/17
+ */
+
+public class StepsTwoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private ArrayList<ChooseEntity> list;
+    private Context context;
+    private final int ONE = 1;
+    private final int TWO = 2;
+    private final int THREE = 3;
+    private final int FOUR = 4;
+    private final int FIVE = 5;
+    private final int SIX = 6;
+    private final int SEVEN = 7;
+    ArrayList<ChooseType> typeList = new ArrayList<>();
+
+    public StepsTwoAdapter(ArrayList<ChooseEntity> list, Context context) {
+        this.context = context;
+        this.list = list;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == ONE) {
+            return new ccfViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_ccf, parent, false));
+        } else if (viewType == TWO) {
+            return new zsfViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_zsf, parent, false));
+        } else if (viewType == THREE) {
+            return new pxfViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_pxf, parent, false));
+        } else if (viewType == FOUR) {
+            return new qtfyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_qtfy, parent, false));
+        } else if (viewType == FIVE) {
+            return new hyfViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_hyf, parent, false));
+        } else if (viewType == SIX) {
+            return new ccbzViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_ccbz, parent, false));
+        } else {
+            return new hsbzViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_hsbz, parent, false));
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ChooseEntity bean = list.get(position);
+        if (holder instanceof ccfViewHolder) { // 车船费
+            ccfViewHolder ccfHolder = (ccfViewHolder) holder;
+            ccfHolder.ccfDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                ccfHolder.ccfStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                ccfHolder.ccfEndTime.setText(bean.getEndTime());
+            }
+            if (!TextUtils.isEmpty(bean.getBars())) {
+                ccfHolder.ccfTraffic.setText(bean.getBars());
+            }
+            ccfHolder.ccfStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        ccfHolder.ccfStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            ccfHolder.ccfEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        ccfHolder.ccfEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            ccfHolder.ccfTraffic.setOnClickListener(v -> {
+                typeList.clear();
+                View contentView = LayoutInflater.from(context).inflate(R.layout.pop_choose_type, null, false);
+                ListView listView = contentView.findViewById(R.id.list_view);
+                PopupWindow popupWindow = new PopupWindow(contentView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+//                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setTouchable(true);
+                popupWindow.showAsDropDown(ccfHolder.ccfTraffic, 0, 0);
+                ChooseType chooseType = new ChooseType("飞机");
+                typeList.add(chooseType);
+                ChooseType chooseType1 = new ChooseType("火箭");
+                typeList.add(chooseType1);
+                ChooseType chooseType2 = new ChooseType("轮窜");
+                typeList.add(chooseType2);
+                ccfAdapter chooseTypeAdapter = new ccfAdapter();
+                listView.setAdapter(chooseTypeAdapter);
+                listView.setOnItemClickListener((parent, view, position1, id) -> {
+                    ccfHolder.ccfTraffic.setText(typeList.get(position1).getTypeName());
+                    bean.setBars(typeList.get(position1).getTypeName());
+                    popupWindow.dismiss();
+                    notifyDataSetChanged();
+                });
+            });
+            ccfHolder.ccfPeople.setTag(bean);
+            ccfHolder.ccfMoney.setTag(bean);
+            ccfHolder.ccfPeople.clearFocus();
+            ccfHolder.ccfMoney.clearFocus();
+
+            ccfHolder.ccfPeople.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) ((ccfViewHolder) holder).ccfPeople.getTag();
+                    bean.setPeopleNum(s + "");
+                }
+            });
+
+            if (!TextUtils.isEmpty(bean.getPeopleNum())) {
+                ccfHolder.ccfPeople.setText(bean.getPeopleNum());
+            } else {
+                ccfHolder.ccfPeople.setText("");
+            }
+            ccfHolder.ccfMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) ccfHolder.ccfMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                ccfHolder.ccfMoney.setText(bean.getMoney());
+            } else {
+                ccfHolder.ccfMoney.setText("");
+            }
+
+        } else if (holder instanceof zsfViewHolder) { // 住宿费
+            zsfViewHolder zsfHolder = (zsfViewHolder) holder;
+            zsfHolder.zsfDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                zsfHolder.zsfStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                zsfHolder.zsfEndTime.setText(bean.getEndTime());
+            }
+            zsfHolder.zsfStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        zsfHolder.zsfStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            zsfHolder.zsfEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        zsfHolder.zsfEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            zsfHolder.zsfPeople.setTag(bean);
+            zsfHolder.zsfMoney.setTag(bean);
+            zsfHolder.zsfPeople.clearFocus();
+            zsfHolder.zsfMoney.clearFocus();
+
+            zsfHolder.zsfPeople.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) zsfHolder.zsfPeople.getTag();
+                    bean.setPeopleNum(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getPeopleNum())) {
+                zsfHolder.zsfPeople.setText(bean.getPeopleNum());
+            } else {
+                zsfHolder.zsfPeople.setText("");
+            }
+
+            zsfHolder.zsfMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) zsfHolder.zsfMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                zsfHolder.zsfMoney.setText(bean.getMoney());
+            } else {
+                zsfHolder.zsfMoney.setText("");
+            }
+
+        } else if (holder instanceof pxfViewHolder) { // 培训费
+            pxfViewHolder pxfHolder = (pxfViewHolder) holder;
+            pxfHolder.pxfDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                pxfHolder.pxfStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                pxfHolder.pxfEndTime.setText(bean.getEndTime());
+            }
+            pxfHolder.pxfStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        pxfHolder.pxfStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            pxfHolder.pxfEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        pxfHolder.pxfEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            pxfHolder.pxfPeople.setTag(bean);
+            pxfHolder.pxfMoney.setTag(bean);
+            pxfHolder.pxfPeople.clearFocus();
+            pxfHolder.pxfMoney.clearFocus();
+
+            pxfHolder.pxfPeople.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) pxfHolder.pxfPeople.getTag();
+                    bean.setPeopleNum(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getPeopleNum())) {
+                pxfHolder.pxfPeople.setText(bean.getPeopleNum());
+            } else {
+                pxfHolder.pxfPeople.setText("");
+            }
+
+            pxfHolder.pxfMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) pxfHolder.pxfMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                pxfHolder.pxfMoney.setText(bean.getMoney());
+            } else {
+                pxfHolder.pxfMoney.setText("");
+            }
+
+        } else if (holder instanceof qtfyViewHolder) { // 其他费用
+            qtfyViewHolder qtfyHolder = (qtfyViewHolder) holder;
+            qtfyHolder.qtfyDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                qtfyHolder.qtfyStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                qtfyHolder.qtfyEndTime.setText(bean.getEndTime());
+            }
+            qtfyHolder.qtfyStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        qtfyHolder.qtfyStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            qtfyHolder.qtfyEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        qtfyHolder.qtfyEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            qtfyHolder.qtfyPeople.setTag(bean);
+            qtfyHolder.qtfyMoney.setTag(bean);
+            qtfyHolder.qtfyQtfyFysm.setTag(bean);
+            qtfyHolder.qtfyPeople.clearFocus();
+            qtfyHolder.qtfyMoney.clearFocus();
+            qtfyHolder.qtfyQtfyFysm.clearFocus();
+
+            qtfyHolder.qtfyPeople.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) qtfyHolder.qtfyPeople.getTag();
+                    bean.setPeopleNum(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getPeopleNum())) {
+                qtfyHolder.qtfyPeople.setText(bean.getPeopleNum());
+            } else {
+                qtfyHolder.qtfyPeople.setText("");
+            }
+
+            qtfyHolder.qtfyMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) qtfyHolder.qtfyMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                qtfyHolder.qtfyMoney.setText(bean.getMoney());
+            } else {
+                qtfyHolder.qtfyMoney.setText("");
+            }
+
+            qtfyHolder.qtfyQtfyFysm.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) qtfyHolder.qtfyQtfyFysm.getTag();
+                    bean.setCostsThat(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getCostsThat())) {
+                qtfyHolder.qtfyQtfyFysm.setText(bean.getCostsThat());
+            } else {
+                qtfyHolder.qtfyQtfyFysm.setText("");
+            }
+
+        } else if (holder instanceof hyfViewHolder) {  // 会议费
+            hyfViewHolder hyfHolder = (hyfViewHolder) holder;
+            hyfHolder.hyfDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                hyfHolder.hyfStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                hyfHolder.hyfEndTime.setText(bean.getEndTime());
+            }
+            hyfHolder.hyfStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        hyfHolder.hyfStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            hyfHolder.hyfEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        hyfHolder.hyfEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            hyfHolder.hyfPeople.setTag(bean);
+            hyfHolder.hyfMoney.setTag(bean);
+            hyfHolder.hyfPeople.clearFocus();
+            hyfHolder.hyfMoney.clearFocus();
+
+            hyfHolder.hyfPeople.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) hyfHolder.hyfPeople.getTag();
+                    bean.setPeopleNum(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getPeopleNum())) {
+                hyfHolder.hyfPeople.setText(bean.getPeopleNum());
+            } else {
+                hyfHolder.hyfPeople.setText("");
+            }
+
+            hyfHolder.hyfMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) hyfHolder.hyfMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                hyfHolder.hyfMoney.setText(bean.getMoney());
+            } else {
+                hyfHolder.hyfMoney.setText("");
+            }
+
+        } else if (holder instanceof ccbzViewHolder) {  // 出差补助
+            ccbzViewHolder ccbzHolder = (ccbzViewHolder) holder;
+            ccbzHolder.ccbzDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                ccbzHolder.ccbzStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                ccbzHolder.ccbzEndTime.setText(bean.getEndTime());
+            }
+            ccbzHolder.ccbzStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        ccbzHolder.ccbzStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            ccbzHolder.ccbzEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        ccbzHolder.ccbzEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            ccbzHolder.ccbzDay.setTag(bean);
+            ccbzHolder.ccbzMoney.setTag(bean);
+            ccbzHolder.ccbzDay.clearFocus();
+            ccbzHolder.ccbzMoney.clearFocus();
+
+            ccbzHolder.ccbzDay.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) ccbzHolder.ccbzDay.getTag();
+                    bean.setDays(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getDays())) {
+                ccbzHolder.ccbzDay.setText(bean.getDays());
+            } else {
+                ccbzHolder.ccbzDay.setText("");
+            }
+
+            ccbzHolder.ccbzMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) ccbzHolder.ccbzMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                ccbzHolder.ccbzMoney.setText(bean.getMoney());
+            } else {
+                ccbzHolder.ccbzMoney.setText("");
+            }
+        } else if (holder instanceof hsbzViewHolder) { // 伙食补助
+            hsbzViewHolder hsbzHolder = (hsbzViewHolder) holder;
+            hsbzHolder.hsbzDelete.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+            if (!TextUtils.isEmpty(bean.getStartTime())) {
+                hsbzHolder.hsbzStartTime.setText(bean.getStartTime());
+            }
+            if (!TextUtils.isEmpty(bean.getEndTime())) {
+                hsbzHolder.hsbzEndTime.setText(bean.getEndTime());
+            }
+            hsbzHolder.hsbzStartTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        hsbzHolder.hsbzStartTime.setText(date);
+                        bean.setStartTime(date);
+                    }));
+            hsbzHolder.hsbzEndTime.setOnClickListener(v ->
+                    DialogUtils.showDatePicker(context, date -> {
+                        hsbzHolder.hsbzEndTime.setText(date);
+                        bean.setEndTime(date);
+                    }));
+            hsbzHolder.hsbzDay.setTag(bean);
+            hsbzHolder.hsbzMoney.setTag(bean);
+            hsbzHolder.hsbzDay.clearFocus();
+            hsbzHolder.hsbzMoney.clearFocus();
+
+            hsbzHolder.hsbzDay.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) hsbzHolder.hsbzDay.getTag();
+                    bean.setDays(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getDays())) {
+                hsbzHolder.hsbzDay.setText(bean.getDays());
+            } else {
+                hsbzHolder.hsbzDay.setText("");
+            }
+
+            hsbzHolder.hsbzMoney.addTextChangedListener(new DedindTextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    ChooseEntity bean = (ChooseEntity) hsbzHolder.hsbzMoney.getTag();
+                    bean.setMoney(s + "");
+                }
+            });
+            if (!TextUtils.isEmpty(bean.getMoney())) {
+                hsbzHolder.hsbzMoney.setText(bean.getMoney());
+            } else {
+                hsbzHolder.hsbzMoney.setText("");
+            }
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int type = list.get(position).getType();
+        if (type == ONE) {
+            return ONE;
+        }
+        if (type == TWO) {
+            return TWO;
+        }
+        if (type == THREE) {
+            return THREE;
+        }
+        if (type == FOUR) {
+            return FOUR;
+        }
+        if (type == FIVE) {
+            return FIVE;
+        }
+        if (type == SIX) {
+            return SIX;
+        }
+        if (type == SEVEN) {
+            return SEVEN;
+        }
+        return super.getItemViewType(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public class ccfViewHolder extends RecyclerView.ViewHolder {
+        private TextView ccfDelete, ccfStartTime, ccfEndTime, ccfTraffic;
+        private EditText ccfPeople, ccfMoney;
+
+        public ccfViewHolder(View itemView) {
+            super(itemView);
+            ccfDelete = itemView.findViewById(R.id.view_ccf_delete);
+            ccfPeople = itemView.findViewById(R.id.view_ccf_person_num);
+            ccfStartTime = itemView.findViewById(R.id.view_ccf_start_time);
+            ccfEndTime = itemView.findViewById(R.id.view_ccf_end_time);
+            ccfTraffic = itemView.findViewById(R.id.view_ccf_traffic);
+            ccfMoney = itemView.findViewById(R.id.view_ccf_money);
+        }
+    }
+
+    public class zsfViewHolder extends RecyclerView.ViewHolder {
+        private TextView zsfDelete, zsfStartTime, zsfEndTime;
+        private EditText zsfPeople, zsfMoney;
+
+        public zsfViewHolder(View itemView) {
+            super(itemView);
+            zsfDelete = itemView.findViewById(R.id.view_zsf_delete);
+            zsfPeople = itemView.findViewById(R.id.view_zsf_people);
+            zsfStartTime = itemView.findViewById(R.id.view_zsf_start_time);
+            zsfEndTime = itemView.findViewById(R.id.view_zsf_end_time);
+            zsfMoney = itemView.findViewById(R.id.view_zsf_money);
+        }
+    }
+
+    public class pxfViewHolder extends RecyclerView.ViewHolder {
+        private TextView pxfDelete, pxfStartTime, pxfEndTime;
+        private EditText pxfPeople, pxfMoney;
+
+        public pxfViewHolder(View itemView) {
+            super(itemView);
+            pxfDelete = itemView.findViewById(R.id.view_pfx_delete);
+            pxfPeople = itemView.findViewById(R.id.view_pfx_people);
+            pxfStartTime = itemView.findViewById(R.id.view_pfx_start_time);
+            pxfEndTime = itemView.findViewById(R.id.view_pfx_end_time);
+            pxfMoney = itemView.findViewById(R.id.view_pfx_money);
+        }
+    }
+
+    public class qtfyViewHolder extends RecyclerView.ViewHolder {
+        private TextView qtfyDelete, qtfyStartTime, qtfyEndTime;
+        private EditText qtfyPeople, qtfyMoney, qtfyQtfyFysm;
+
+        public qtfyViewHolder(View itemView) {
+            super(itemView);
+            qtfyDelete = itemView.findViewById(R.id.view_qtfy_delete);
+            qtfyStartTime = itemView.findViewById(R.id.view_qtfy_start_time);
+            qtfyEndTime = itemView.findViewById(R.id.view_qtfy_end_time);
+            qtfyPeople = itemView.findViewById(R.id.view_qtfy_people);
+            qtfyMoney = itemView.findViewById(R.id.view_qtfy_money);
+            qtfyQtfyFysm = itemView.findViewById(R.id.view_qtfy_fysm);
+        }
+    }
+
+    public class hyfViewHolder extends RecyclerView.ViewHolder {
+        private TextView hyfDelete, hyfStartTime, hyfEndTime;
+        private EditText hyfPeople, hyfMoney;
+
+        public hyfViewHolder(View itemView) {
+            super(itemView);
+            hyfDelete = itemView.findViewById(R.id.view_hyf_delete);
+            hyfPeople = itemView.findViewById(R.id.view_hyf_people);
+            hyfStartTime = itemView.findViewById(R.id.view_hyf_start_time);
+            hyfEndTime = itemView.findViewById(R.id.view_hyf_end_time);
+            hyfMoney = itemView.findViewById(R.id.view_hyf_money);
+        }
+    }
+
+    public class ccbzViewHolder extends RecyclerView.ViewHolder {
+        private TextView ccbzDelete, ccbzStartTime, ccbzEndTime, ccbzStandard;
+        private EditText ccbzDay, ccbzMoney;
+
+        public ccbzViewHolder(View itemView) {
+            super(itemView);
+            ccbzDelete = itemView.findViewById(R.id.view_ccbz_delete);
+            ccbzStandard = itemView.findViewById(R.id.view_ccbz_standard);
+            ccbzStartTime = itemView.findViewById(R.id.view_ccbz_start_time);
+            ccbzEndTime = itemView.findViewById(R.id.view_ccbz_end_time);
+            ccbzDay = itemView.findViewById(R.id.view_ccbz_day);
+            ccbzMoney = itemView.findViewById(R.id.view_ccbz_money);
+        }
+    }
+
+    public class hsbzViewHolder extends RecyclerView.ViewHolder {
+        private TextView hsbzDelete, hsbzStartTime, hsbzEndTime, hsbzStandard;
+        private EditText hsbzDay, hsbzMoney;
+
+        public hsbzViewHolder(View itemView) {
+            super(itemView);
+            hsbzDelete = itemView.findViewById(R.id.view_hsbz_delete);
+            hsbzDay = itemView.findViewById(R.id.view_hsbz_day);
+            hsbzStartTime = itemView.findViewById(R.id.view_hsbz_start_time);
+            hsbzEndTime = itemView.findViewById(R.id.view_hsbz_end_time);
+            hsbzStandard = itemView.findViewById(R.id.view_hsbz_standard);
+            hsbzMoney = itemView.findViewById(R.id.view_hsbz_money);
+        }
+    }
+
+    class ccfAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return typeList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return typeList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = View.inflate(context, R.layout.pop_item_list, null);
+            TextView mTextView = convertView.findViewById(R.id.text);
+            mTextView.setText(typeList.get(position).getTypeName());
+
+            return convertView;
+        }
+
+    }
+}

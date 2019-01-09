@@ -1,0 +1,80 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.common.network.FProtocol;
+import com.common.viewinject.annotation.ViewInject;
+
+import java.util.List;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.NoticeListEntity;
+import code.spxt.cn.utils.DateUtils;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+
+/**
+ * 公告列表
+ */
+public class NoticeActivity extends ToolBarActivity {
+
+    @ViewInject(R.id.recycler)
+    private RecyclerView recyclerView;
+
+    public static void startNoticeActivity(Context context){
+        Intent intent = new Intent(context,NoticeActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notice);
+        ViewInjectUtils.inject(this);
+        setCenterTitle("公告列表");
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        noticeList();
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode){
+            case REQUEST_NET_ONE:
+                NoticeListEntity noticeList = Parsers.getNoticeList(data);
+                if (noticeList != null){
+                    List<NoticeListEntity.NoticeListBean> listBeans = noticeList.getNotice_list();
+                    if (listBeans != null && listBeans.size() > 0){
+                        BaseQuickAdapter<NoticeListEntity.NoticeListBean,BaseViewHolder> adapter = new BaseQuickAdapter<NoticeListEntity.NoticeListBean, BaseViewHolder>(R.layout.item_notice_recycler,listBeans) {
+                            @Override
+                            protected void convert(BaseViewHolder helper, NoticeListEntity.NoticeListBean item) {
+                                String time = DateUtils.getDateToString(item.getCreateDate());
+                                helper.setText(R.id.item_notice_time,time);
+                                helper.setText(R.id.item_notice_content,item.getName());
+                            }
+                        };
+                        recyclerView.setAdapter(adapter);
+                        adapter.setOnItemClickListener((adapter1, view, position) -> {
+
+                        });
+                    }
+                }
+                break;
+        }
+    }
+
+    public void noticeList(){
+        showProgressDialog();
+        requestHttpData(Constants.Urls.URL_POST_NOTICELIST,REQUEST_NET_ONE, FProtocol.HttpMethod.POST,null);
+    }
+}

@@ -1,0 +1,150 @@
+package code.spxt.cn.fragments;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.TextView;
+
+import com.common.ui.FBaseFragment;
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import code.spxt.cn.R;
+import code.spxt.cn.adapters.StepsOneAdapter;
+import code.spxt.cn.network.entity.AddressEntity;
+import code.spxt.cn.network.entity.OneEntity;
+import code.spxt.cn.utils.DialogUtils;
+import code.spxt.cn.utils.ViewInjectUtils;
+import code.spxt.cn.view.MyItemAnimator;
+
+/**
+ * 出差旅费步骤一
+ */
+
+public class StepsOneFragment extends FBaseFragment implements View.OnClickListener {
+
+    @ViewInject(R.id.steps_one_name)
+    private TextView userName;
+    @ViewInject(R.id.steps_one_position)
+    private TextView userPosition;
+    @ViewInject(R.id.steps_one_start_time)
+    private TextView startTime;
+    @ViewInject(R.id.steps_one_end_time)
+    private TextView endTime;
+    @ViewInject(R.id.steps_one_add_address)
+    private TextView addAddress;
+    @ViewInject(R.id.steps_one_recycler)
+    private RecyclerView recyclerView;
+    @ViewInject(R.id.steps_one_reason)
+    private TextView reason;
+    private ArrayList<AddressEntity> listAddress;
+    private StepsOneAdapter adapter;
+    private int year;
+    private int month;
+    private int date;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_steps_one, container, false);
+        ViewInjectUtils.inject(this, view);
+        initView();
+        return view;
+    }
+
+    private void initView() {
+        startTime.setOnClickListener(this);
+        endTime.setOnClickListener(this);
+        addAddress.setOnClickListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listAddress = new ArrayList<>();
+        adapter = new StepsOneAdapter(getActivity(), this, listAddress);
+        recyclerView.setAdapter(adapter);
+
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH) + 1;
+        date = calendar.get(Calendar.DATE);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.steps_one_start_time:
+                View view = View.inflate(getActivity(), R.layout.dialog_time, null);
+                AlertDialog dialog = new AlertDialog.Builder(getActivity()).setView(view).create();
+                dialog.show();
+                DatePicker datePicker = view.findViewById(R.id.date_picker);
+                datePicker.init(year, month, date, (view1, year1, monthOfYear, dayOfMonth) -> {
+                    startTime.setText(year1 + "-" + monthOfYear + "-" + dayOfMonth);
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.steps_one_end_time:
+                View views = View.inflate(getActivity(), R.layout.dialog_time, null);
+                AlertDialog dialogs = new AlertDialog.Builder(getActivity()).setView(views).create();
+                dialogs.show();
+                DatePicker datePickers = views.findViewById(R.id.date_picker);
+                datePickers.init(year, month, date, (view1, year1, monthOfYear, dayOfMonth) -> {
+                    endTime.setText(year1 + "-" + monthOfYear + "-" + dayOfMonth);
+                    dialogs.dismiss();
+                });
+                break;
+            case R.id.steps_one_add_address:
+                AddressEntity entity = new AddressEntity();
+                adapter.addData(0, entity);
+                recyclerView.scrollToPosition(0);
+                MyItemAnimator animator = new MyItemAnimator();
+                animator.setAddDuration(500);
+                animator.setMoveDuration(500);
+                animator.setRemoveDuration(500);
+                recyclerView.setItemAnimator(animator);
+                break;
+            case R.id.item_steps_one_choose_address:
+                DialogUtils.showAddressDialog(getActivity(), (Integer) v.getTag(), (addressName, position) -> {
+                    listAddress.get(position).setAddress(addressName);
+                    adapter.notifyDataSetChanged();
+                });
+                break;
+        }
+    }
+
+    public OneEntity isClick() {
+        OneEntity oneEntity = new OneEntity();
+        String start = startTime.getText().toString();
+        String end = endTime.getText().toString();
+        String reson = reason.getText().toString();
+        if (TextUtils.isEmpty(start)) {
+            ToastUtil.show(getContext(), "请选择起始日期");
+            return null;
+        }
+        if (TextUtils.isEmpty(end)) {
+            ToastUtil.show(getContext(), "请选择截止日期");
+            return null;
+        }
+        if (TextUtils.isEmpty(reson)) {
+            ToastUtil.show(getContext(), "请输入出差事由");
+            return null;
+        }
+        oneEntity.setStartTime(start);
+        oneEntity.setEndTime(end);
+        oneEntity.setReason(reson);
+
+        return oneEntity;
+    }
+}

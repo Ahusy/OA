@@ -1,0 +1,231 @@
+package code.spxt.cn.network.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Android on 2018/12/20.
+ */
+
+public class BillPublicCarDetail implements Parcelable{
+
+    @SerializedName("flowId")
+    private int flowId;
+    @SerializedName("flowNo")
+    private String flowNo;
+    @SerializedName("flowName")
+    private String flowName;
+    @SerializedName("status")
+    private int status;
+    @SerializedName("createDate")
+    private long createDate;
+    @SerializedName("updateDate")
+    private long updateDate;
+    @SerializedName("applyId")
+    private String applyId;
+    @SerializedName("applyTime")
+    private long applyTime;
+    @SerializedName("carType")
+    private String carType;
+    @SerializedName("plateNumber")
+    private String plateNumber;
+    @SerializedName("reason")
+    private String reason;
+    @SerializedName("destination")
+    private String destination;
+    @SerializedName("together")
+    private String together;
+    @SerializedName("driver")
+    private String driver;
+    @SerializedName("auditTime")
+    private String auditTime;
+    @SerializedName("wfId")
+    private int wfId;
+
+
+    protected BillPublicCarDetail(Parcel in) {
+        flowId = in.readInt();
+        flowNo = in.readString();
+        flowName = in.readString();
+        status = in.readInt();
+        createDate = in.readLong();
+        updateDate = in.readLong();
+        applyId = in.readString();
+        applyTime = in.readLong();
+        carType = in.readString();
+        plateNumber = in.readString();
+        reason = in.readString();
+        destination = in.readString();
+        together = in.readString();
+        driver = in.readString();
+        auditTime = in.readString();
+        wfId = in.readInt();
+    }
+
+    public static final Creator<BillPublicCarDetail> CREATOR = new Creator<BillPublicCarDetail>() {
+        @Override
+        public BillPublicCarDetail createFromParcel(Parcel in) {
+            return new BillPublicCarDetail(in);
+        }
+
+        @Override
+        public BillPublicCarDetail[] newArray(int size) {
+            return new BillPublicCarDetail[size];
+        }
+    };
+
+    public int getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(int flowId) {
+        this.flowId = flowId;
+    }
+
+    public String getFlowNo() {
+        return flowNo;
+    }
+
+    public void setFlowNo(String flowNo) {
+        this.flowNo = flowNo;
+    }
+
+    public String getFlowName() {
+        return flowName;
+    }
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
+
+    public long getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(long updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
+    public long getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(long applyTime) {
+        this.applyTime = applyTime;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
+    public String getPlateNumber() {
+        return plateNumber;
+    }
+
+    public void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getTogether() {
+        return together;
+    }
+
+    public void setTogether(String together) {
+        this.together = together;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(String auditTime) {
+        this.auditTime = auditTime;
+    }
+
+    public int getWfId() {
+        return wfId;
+    }
+
+    public void setWfId(int wfId) {
+        this.wfId = wfId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(flowId);
+        dest.writeString(flowNo);
+        dest.writeString(flowName);
+        dest.writeInt(status);
+        dest.writeLong(createDate);
+        dest.writeLong(updateDate);
+        dest.writeString(applyId);
+        dest.writeLong(applyTime);
+        dest.writeString(carType);
+        dest.writeString(plateNumber);
+        dest.writeString(reason);
+        dest.writeString(destination);
+        dest.writeString(together);
+        dest.writeString(driver);
+        dest.writeString(auditTime);
+        dest.writeInt(wfId);
+    }
+}

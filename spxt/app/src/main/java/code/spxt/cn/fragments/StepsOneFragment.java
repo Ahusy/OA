@@ -1,0 +1,299 @@
+package code.spxt.cn.fragments;
+
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.common.network.FProtocol;
+import com.common.utils.ToastUtil;
+import com.common.viewinject.annotation.ViewInject;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.R;
+import code.spxt.cn.adapters.StepsOneAdapter;
+import code.spxt.cn.base.BaseFragment;
+import code.spxt.cn.common.UserCenter;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.AddressEntity;
+import code.spxt.cn.network.entity.EditTourism;
+import code.spxt.cn.network.entity.Entity;
+import code.spxt.cn.network.entity.Flow;
+import code.spxt.cn.network.entity.OneEntity;
+import code.spxt.cn.network.entity.StepsOneEntity;
+import code.spxt.cn.network.entity.UserEntity;
+import code.spxt.cn.utils.DateUtils;
+import code.spxt.cn.utils.DialogUtils;
+import code.spxt.cn.utils.SafeSharePreferenceUtil;
+import code.spxt.cn.utils.ViewInjectUtils;
+import code.spxt.cn.view.MyItemAnimator;
+
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_SUCCESS;
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_TWO;
+
+/**
+ * 出差旅费步骤一
+ */
+
+public class StepsOneFragment extends BaseFragment implements View.OnClickListener {
+
+    @ViewInject(R.id.steps_one_name)
+    private TextView userName;
+    @ViewInject(R.id.steps_one_position)
+    private TextView userPosition;
+    @ViewInject(R.id.steps_one_start_time)
+    private TextView startTime;
+    @ViewInject(R.id.steps_one_end_time)
+    private TextView endTime;
+    @ViewInject(R.id.steps_one_add_address)
+    private TextView addAddress;
+    @ViewInject(R.id.steps_one_recycler)
+    private RecyclerView recyclerView;
+    @ViewInject(R.id.steps_one_reason)
+    private TextView reason;
+    private ArrayList<AddressEntity> listAddress;
+    private StepsOneAdapter adapter;
+    private String addressJson;
+    private Flow flow;
+    private LocalBroadcastManager instance;
+    private String flowId;
+    private long startLong;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_steps_one, container, false);
+        ViewInjectUtils.inject(this, view);
+        initView();
+        registerReceiver();
+        return view;
+    }
+
+    private void initView() {
+        startTime.setOnClickListener(this);
+        endTime.setOnClickListener(this);
+        addAddress.setOnClickListener(this);
+        UserEntity userInfo = UserCenter.getUserInfo(getContext());
+        userPosition.setText(userInfo.getRole());
+        userName.setText(userInfo.getUser_name());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listAddress = new ArrayList<>();
+        adapter = new StepsOneAdapter(getActivity(), this, listAddress);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle bundle = getArguments();
+        EditTourism et = bundle.getParcelable("et");
+        if (et != null){
+            selectTravelCostOne(String.valueOf(et.getFlowId()));
+        } else {
+            selectTravelCostOne("");
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.steps_one_start_time:
+                DialogUtils.showDatePicker(getContext(),date -> {
+                    startLong = DateUtils.getLong(date);
+                    startTime.setText(date);
+                });
+                break;
+            case R.id.steps_one_end_time:
+                DialogUtils.showDatePicker(getContext(),date -> {
+                    long endLong = DateUtils.getLong(date);
+                    if (endLong < startLong){
+                        ToastUtil.show(getContext(),"结束时间不能小于开始时间");
+                        DialogUtils.closeDialog();
+                    }else{
+                        endTime.setText(date);
+                    }
+                });
+                break;
+            case R.id.steps_one_add_address:
+                AddressEntity entity = new AddressEntity();
+                adapter.addData(0, entity);
+                recyclerView.scrollToPosition(0);
+                MyItemAnimator animator = new MyItemAnimator();
+                animator.setAddDuration(500);
+                animator.setMoveDuration(500);
+                animator.setRemoveDuration(500);
+                recyclerView.setItemAnimator(animator);
+                break;
+            case R.id.item_steps_one_choose_address:
+                DialogUtils.showAddressDialog(getActivity(), (Integer) v.getTag(), (addressName, position) -> {
+                    listAddress.get(position).setAddress(addressName);
+                    adapter.notifyDataSetChanged();
+                });
+                break;
+        }
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode) {
+            case REQUEST_NET_ONE:
+                StepsOneEntity stepsOne = Parsers.getStepsOne(data);
+                if (stepsOne != null) {
+                    if (stepsOne.getApproval() != null) {
+                        flowId = String.valueOf(stepsOne.getApproval().getFlowId());
+                        String selectStartTime = DateUtils.getDateToString(stepsOne.getApproval().getSetOffTime());
+                        String selectEndTime = DateUtils.getDateToString(stepsOne.getApproval().getReturnTime());
+                        startTime.setText(selectStartTime);
+                        endTime.setText(selectEndTime);
+                        for (int i = 0; i < stepsOne.getTravel_place().size(); i++) {
+                            AddressEntity entity = new AddressEntity();
+                            entity.setAddress(stepsOne.getTravel_place().get(i));
+                            adapter.addData(0, entity);
+                        }
+                        reason.setText(stepsOne.getApproval().getTravelReason());
+                        flow = new Flow(String.valueOf(stepsOne.getApproval().getFlowId()), stepsOne.getApproval().getFlowNo());
+                    } else {
+                        flow = new Flow("", "");
+                    }
+                }
+
+                break;
+            case REQUEST_NET_TWO:
+                Entity result = Parsers.getResult(data);
+                if (result.getResultCode().equals(REQUEST_NET_SUCCESS)) {
+                    startTime.setText("");
+                    endTime.setText("");
+                    reason.setText("");
+                    listAddress.clear();
+                    adapter.notifyDataSetChanged();
+                    ToastUtil.show(getContext(), result.getResultMsg());
+                } else {
+                    ToastUtil.show(getContext(), result.getResultMsg());
+                }
+                break;
+        }
+    }
+
+    // 注册广播接收器
+    private void registerReceiver() {
+        instance = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("clear");
+        instance.registerReceiver(mAdDownLoadReceiver, intentFilter);
+    }
+
+    private BroadcastReceiver mAdDownLoadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String change = intent.getStringExtra("change");
+            if ("one".equals(change)) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!TextUtils.isEmpty(flowId)) {
+                            deleteTravelCostApproval(flowId);
+                        } else {
+                            startTime.setText("");
+                            endTime.setText("");
+                            reason.setText("");
+                            listAddress.clear();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    // 注销
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        instance.unregisterReceiver(mAdDownLoadReceiver);
+    }
+
+    public Flow getFlow() {
+        return flow;
+    }
+
+    public OneEntity isClick() {
+        OneEntity oneEntity = new OneEntity();
+        String start = startTime.getText().toString();
+        String end = endTime.getText().toString();
+        String reson = reason.getText().toString();
+
+        if (TextUtils.isEmpty(start)) {
+            ToastUtil.show(getContext(), "请选择起始日期");
+            return null;
+        }
+        if (TextUtils.isEmpty(end)) {
+            ToastUtil.show(getContext(), "请选择截止日期");
+            return null;
+        }
+        if (listAddress.size() == 0) {
+            ToastUtil.show(getContext(), "请添加出差地点");
+            return null;
+        }
+        if (TextUtils.isEmpty(listAddress.get(0).getAddress())) {
+            ToastUtil.show(getContext(), "请选择出差地点");
+            return null;
+        }
+        if (TextUtils.isEmpty(reson)) {
+            ToastUtil.show(getContext(), "请输入出差事由");
+            return null;
+        }
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < listAddress.size(); i++) {
+            try {
+                jsonArray.put(listAddress.get(i).getAddress());
+                addressJson = jsonArray.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        SafeSharePreferenceUtil.saveString("start_time",startTime.getText().toString());
+        SafeSharePreferenceUtil.saveString("end_time",endTime.getText().toString());
+        oneEntity.setAddress(addressJson);
+        oneEntity.setStartTime(start);
+        oneEntity.setEndTime(end);
+        oneEntity.setReason(reson);
+        return oneEntity;
+    }
+
+    private void selectTravelCostOne(String flow_id) {
+        showProgressDialog();
+        IdentityHashMap<String,String> params = new IdentityHashMap<>();
+        params.put("flow_id",flow_id);
+        requestHttpData(Constants.Urls.URL_POST_SELECT_ONE, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, params);
+    }
+
+    private void deleteTravelCostApproval(String flowId) {
+        showProgressDialog();
+        IdentityHashMap<String, String> params = new IdentityHashMap<>();
+        params.put("flow_id", flowId);
+        requestHttpData(Constants.Urls.URL_POST_CLEAR_ONE, REQUEST_NET_TWO, FProtocol.HttpMethod.POST, params);
+    }
+}

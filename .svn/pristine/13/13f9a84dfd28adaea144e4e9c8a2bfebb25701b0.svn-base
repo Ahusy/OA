@@ -1,0 +1,60 @@
+package code.spxt.cn.activitys;
+
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+import com.common.viewinject.annotation.ViewInject;
+
+import java.util.ArrayList;
+
+import code.spxt.cn.R;
+import code.spxt.cn.adapters.WaitMeHandleAdapter;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.common.CommonConstant;
+import code.spxt.cn.network.entity.WaitMeHandlerItem;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+
+public class WaitMeHandleActivity extends ToolBarActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.rv_view)
+    RecyclerView rvView;
+
+    private ArrayList<WaitMeHandlerItem> wmiList = new ArrayList<>();
+    private WaitMeHandleAdapter wmlAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_wait_me_handle);
+        ViewInjectUtils.inject(this);
+        initView();
+    }
+
+    private void initView() {
+        setCenterTitle("待我审批");
+        rvView.setLayoutManager(new LinearLayoutManager(this));
+        wmlAdapter = new WaitMeHandleAdapter(wmiList, this);
+        rvView.setAdapter(wmlAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fl_layout:
+                int index = (int) v.getTag();
+                if (index == 0) {
+                    ApprovalBillOutWorkActivity.startAct(this, CommonConstant.STATUS_ONE);
+                } else if (index == 1) {
+                    ApprovalBillPublicCarUseActivity.startAct(this, CommonConstant.STATUS_ONE);
+                } else if (index == 2) {
+                    ApprovalBillAgreementActivity.startAct(this, CommonConstant.STATUS_ONE);
+                } else if (index == 3) {
+                    ApprovalBillBusinessActivity.startAct(this, CommonConstant.STATUS_ONE);
+                }
+                break;
+        }
+    }
+}

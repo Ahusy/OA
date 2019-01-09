@@ -1,0 +1,27 @@
+package code.spxt.cn.network.entity;
+
+/**
+ * Created by dell on 2018/12/17
+ */
+
+public class AddressEntity {
+    public AddressEntity() {
+    }
+
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressEntity{" +
+                "address='" + address + '\'' +
+                '}';
+    }
+}

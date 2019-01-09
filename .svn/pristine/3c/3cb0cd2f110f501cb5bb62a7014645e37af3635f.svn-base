@@ -1,0 +1,76 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.common.viewinject.annotation.ViewInject;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.utils.Util;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+/**
+ * 我的申请
+ */
+public class MySubmitActivity extends ToolBarActivity implements View.OnClickListener {
+
+    @ViewInject(R.id.submit_recycler)
+    private RecyclerView recyclerView;
+    @ViewInject(R.id.submit_time)
+    private LinearLayout timeClick;
+    @ViewInject(R.id.submit_time_img)
+    private ImageView imgTime;
+    @ViewInject(R.id.submit_status)
+    private LinearLayout statusClick;
+    @ViewInject(R.id.submit_status_text)
+    private TextView statusText;
+    @ViewInject(R.id.rl)
+    private RelativeLayout rl;
+
+    public static void startMySubmitActivity(Context context) {
+        Intent intent = new Intent(context, MySubmitActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.spxt_my_submit);
+        initView();
+    }
+
+    private void initView() {
+        setCenterTitle("我的申请");
+        ViewInjectUtils.inject(this);
+        timeClick.setOnClickListener(this);
+        statusClick.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.submit_time:
+                View contentView = LayoutInflater.from(this).inflate(R.layout.popuwindow_choose_status, null, false);
+                PopupWindow popupWindow = new PopupWindow(contentView, Util.dip2px(this, 400), Util.dip2px(this, 400), true);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setTouchable(true);
+                popupWindow.showAsDropDown(rl, 0, 0);
+                break;
+            case R.id.submit_status:
+                break;
+        }
+    }
+}

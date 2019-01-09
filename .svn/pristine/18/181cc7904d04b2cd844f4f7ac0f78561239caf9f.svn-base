@@ -1,0 +1,9 @@
+package code.spxt.cn.network.entity;
+
+/**
+ * Android on 2018/12/17.
+ */
+
+public class WaitMeHandlerItem {
+
+}

@@ -1,0 +1,150 @@
+package code.spxt.cn.activitys;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.common.network.FProtocol;
+import com.common.viewinject.annotation.ViewInject;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+
+import code.spxt.cn.R;
+import code.spxt.cn.adapters.MyReviewAdapter;
+import code.spxt.cn.base.ToolBarActivity;
+import code.spxt.cn.common.CommonConstant;
+import code.spxt.cn.network.Constants;
+import code.spxt.cn.network.Parsers;
+import code.spxt.cn.network.entity.MyReviewItem;
+import code.spxt.cn.utils.ViewInjectUtils;
+
+import static code.spxt.cn.common.CommonConstant.REQUEST_NET_ONE;
+
+public class MyReviewActivity extends ToolBarActivity implements View.OnClickListener {
+    @ViewInject(R.id.rv_view)
+    private XRecyclerView rvView;
+    @ViewInject(R.id.submit_time)
+    private LinearLayout timeClick;
+    @ViewInject(R.id.submit_time_img)
+    private ImageView imgTime;
+    @ViewInject(R.id.submit_status)
+    private LinearLayout statusClick;
+    @ViewInject(R.id.submit_status_text)
+    private TextView statusText;
+    @ViewInject(R.id.rl)
+    private RelativeLayout rl;
+
+    private ArrayList<MyReviewItem> mrList = new ArrayList<>();
+    private MyReviewAdapter mrAdapter;
+    private int currentPage = 1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_review);
+        ViewInjectUtils.inject(this);
+        initView();
+        initData();
+    }
+
+    private void initView() {
+        setCenterTitle("我审批的");
+        timeClick.setOnClickListener(this);
+        statusClick.setOnClickListener(this);
+        rvView.setLayoutManager(new LinearLayoutManager(this));
+        mrAdapter = new MyReviewAdapter(mrList, this);
+        rvView.setAdapter(mrAdapter);
+        initListener();
+
+    }
+
+    private void initData() {
+        requestData(true);
+    }
+
+    private void initListener() {
+        rvView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                requestData(true);
+            }
+
+            @Override
+            public void onLoadMore() {
+                requestData(false);
+            }
+        });
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.submit_time:
+
+                break;
+            case R.id.submit_status:
+                View contentView = LayoutInflater.from(this).inflate(R.layout.popuwindow_choose_status, null, false);
+                PopupWindow popupWindow = new PopupWindow(contentView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setTouchable(true);
+                popupWindow.showAsDropDown(rl, 0, 0);
+                break;
+            case R.id.fl_layout:
+            case R.id.tv_reset:
+                MyReviewItem mr = (MyReviewItem) v.getTag();
+                int wfId = mr.getWfId();
+                if (wfId == 2) {
+                    ApprovalBillOutWorkActivity.startAct(this, mr.getFlowId(), mr.getStatus(), mr.getWorkerName(), mr.getStatus() == 3 ? CommonConstant.STATUS_ONE : CommonConstant.STATUS_THREE);
+                } else if (wfId == 4) {
+                    ApprovalBillPublicCarUseActivity.startAct(this, mr.getFlowId(), mr.getStatus(), mr.getWorkerName(), mr.getStatus() == 3 ? CommonConstant.STATUS_ONE : CommonConstant.STATUS_THREE);
+                } else if (wfId == 5) {
+                    ApprovalBillAgreementActivity.startAct(this, mr.getFlowId(), mr.getStatus(), mr.getWorkerName(), mr.getStatus() == 3 ? CommonConstant.STATUS_ONE : CommonConstant.STATUS_THREE);
+                } else if (wfId == 3) {
+                    ApprovalBillBusinessActivity.startAct(this, mr.getFlowId(), mr.getStatus(), mr.getWorkerName(), mr.getStatus() == 3 ? CommonConstant.STATUS_ONE : CommonConstant.STATUS_THREE);
+                }
+                break;
+        }
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode) {
+            case CommonConstant.REQUEST_NET_ONE:
+                ArrayList<MyReviewItem> sList = Parsers.getReviewList(data);
+                if (sList != null && sList.size() > 0) {
+                    if (currentPage == 1) {
+                        mrList.clear();
+                    }
+                    ++currentPage;
+                    mrList.addAll(sList);
+                    mrAdapter.notifyDataSetChanged();
+                }
+                rvView.reset();
+                break;
+        }
+    }
+
+    private void requestData(boolean isFirst) {
+        if (isFirst) {
+            currentPage = 1;
+        }
+        IdentityHashMap<String, String> map = new IdentityHashMap<>();
+        map.put(CommonConstant.PAGESIZE, CommonConstant.PAGE_SIZE_10);
+        map.put(CommonConstant.PAGENUM, String.valueOf(currentPage));
+        requestHttpData(Constants.Urls.URL_POST_HASAPPROVALLIST, REQUEST_NET_ONE, FProtocol.HttpMethod.POST, map);
+    }
+}

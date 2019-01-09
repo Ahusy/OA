@@ -1,0 +1,26 @@
+package code.spxt.cn.activitys;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import code.spxt.cn.R;
+import code.spxt.cn.base.ToolBarActivity;
+
+/**
+ * 业务招待费审批单
+ */
+public class BusinessActivity extends ToolBarActivity {
+
+    public static void startBusinessActivity(Context context){
+        Intent intent = new Intent(context,BusinessActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.spxt_business);
+        setCenterTitle("业务招待费审批单");
+    }
+}

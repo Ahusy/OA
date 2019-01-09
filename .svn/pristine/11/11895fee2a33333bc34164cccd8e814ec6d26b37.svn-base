@@ -1,0 +1,78 @@
+package code.spxt.cn.network.entity;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+
+/**
+ * Android on 2018/12/20.
+ */
+
+public class BillTourismMoneyDetail {
+    private String capital_total;
+    private int total;
+    private String role;
+    private String travel_place;//地点
+    private String travel_reason;
+    @SerializedName("item_list")
+    private ArrayList<StepsTwoEntity.ItemsListBean> moneyList;
+    @SerializedName("pic_list")
+    private ArrayList<PhotoCopyEntity> picList;
+
+    public ArrayList<PhotoCopyEntity> getPicList() {
+        return picList;
+    }
+
+    public void setPicList(ArrayList<PhotoCopyEntity> picList) {
+        this.picList = picList;
+    }
+
+    public ArrayList<StepsTwoEntity.ItemsListBean> getMoneyList() {
+        return moneyList;
+    }
+
+    public String getTravel_place() {
+        return travel_place;
+    }
+
+    public void setTravel_place(String travel_place) {
+        this.travel_place = travel_place;
+    }
+
+    public void setMoneyList(ArrayList<StepsTwoEntity.ItemsListBean> moneyList) {
+        this.moneyList = moneyList;
+
+    }
+
+    public String getTravel_reason() {
+        return travel_reason;
+    }
+
+    public void setTravel_reason(String travel_reason) {
+        this.travel_reason = travel_reason;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public String getCapital_total() {
+        return capital_total;
+    }
+
+    public void setCapital_total(String capital_total) {
+        this.capital_total = capital_total;
+    }
+}

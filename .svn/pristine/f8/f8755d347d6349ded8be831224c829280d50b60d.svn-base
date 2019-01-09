@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_10">
+
+    <TextView
+        style="@style/t5_b5_s10_e10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_solid_8ebaf7_5dp"
+        android:text="撤回申请"
+        android:textColor="@color/white" />
+
+    <TextView
+        style="@style/t5_b5_s10_e10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_solid_8ebaf7_5dp"
+        android:text="再次编辑提交"
+        android:textColor="@color/white" />
+
+    <TextView
+        style="@style/t5_b5_s10_e10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/shape_solid_a3a4a7_5dp"
+        android:text="    返回    "
+        android:textColor="@color/white" />
+</FrameLayout>

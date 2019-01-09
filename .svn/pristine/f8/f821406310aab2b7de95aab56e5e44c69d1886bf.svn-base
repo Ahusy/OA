@@ -1,0 +1,17 @@
+package code.spxt.cn.network;
+
+/**
+ * Created by dell on 2018/12/12
+ */
+
+public class Constants {
+
+    public static class Urls{
+        private static String URL_BASE_DOMAIN = "http://miner.ezhiying.cn";
+
+
+
+        // 版本更新
+        public static String URL_POST_CHECK_UPDATE = URL_BASE_DOMAIN + "/versionUpdate";
+    }
+}
